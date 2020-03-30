@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import AWS from "aws-sdk";
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import App from './components/App';
+import * as serviceWorker from './components/serviceWorker';
 
 AWS.config.update({
     accessKeyId: 'AKIAVQLA7TQ5KQHYBOE2' ,

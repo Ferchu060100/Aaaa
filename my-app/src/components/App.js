@@ -3,6 +3,8 @@ import './App.css';
 import { Line } from 'react-chartjs-2';
 import { Card, CardBody } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
+import {BrowserRouter as Router,Route} from 'react-router-dom';
+import SignUp from '../RegistrarUsuario'
 //import  dataHumedad  from './Data'
     
      
@@ -131,13 +133,16 @@ function data_temperatura(datasrc=[]) {
     }
   ]}
 };
-
+ 
 
 
 function App(props) {
   
   return (
   <div className="Appt">
+            <Router>
+              <Route path="/registrar" component={SignUp}/>
+      </Router>
       <ToastContainer />
     <div className="container">
        <div style={{ marginTop: '20px'}}>

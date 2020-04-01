@@ -5,6 +5,7 @@ import { Card, CardBody } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
 import SignUp from '../RegistrarUsuario'
+import RegistrarCultivo from '../RegistrarCultivo'
 //import  dataHumedad  from './Data'
     
      
@@ -142,6 +143,7 @@ function App(props) {
   <div className="Appt">
             <Router>
               <Route path="/registrar" component={SignUp}/>
+              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
       </Router>
       <ToastContainer />
     <div className="container">

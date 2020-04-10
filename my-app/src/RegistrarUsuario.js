@@ -106,7 +106,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="iniciarsesion" variant="body2">
                ¿Ya tienes una cuenta?. Inicia Sesión
               </Link>
             </Grid>

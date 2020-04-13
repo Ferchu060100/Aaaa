@@ -4,7 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { Card, CardBody } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 //import  dataHumedad  from './Data'
-    
+import Monitor from './monitor-component/Monitor';  
      
 
 function lineOptions(labels = []) {
@@ -137,7 +137,8 @@ function data_temperatura(datasrc=[]) {
 function App(props) {
   
   return (
-  <div className="Appt">
+    <Monitor />
+  /*<div className="Appt">
       <ToastContainer />
     <div className="container">
        <div style={{ marginTop: '20px'}}>
@@ -165,10 +166,10 @@ function App(props) {
                 <hr />
       </div>
     </div>
-    </div>
+  </div>*/
 
 
-);
+  );
 }
 
 export default App;

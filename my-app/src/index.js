@@ -10,7 +10,7 @@ AWS.config.update({
     secretAccessKey: 'qHEGUISHXtoOF4wQwlucku0HSX1QfbjFAhuGuTdu' ,
     region: "us-east-2",
   });
-const docClient = new AWS.DynamoDB.DocumentClient();         
+ const docClient = new AWS.DynamoDB.DocumentClient();         
 const params = {
     TableName: "POC_Sensor_Data",
     scan_index_forward: false
@@ -20,7 +20,26 @@ var recentEventsDateTime = [];
 var humedadValues = [];
 var temperaturaValues = [];
 var luminosidadValues = [];
+var dataMonitor = null
+export function getMonitorData() {
+    AWS.config.update({
+        accessKeyId: 'AKIAVQLA7TQ5KQHYBOE2' ,
+        secretAccessKey: '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' ,
+        region: "us-east-2",
+      });
+    const docClient = new AWS.DynamoDB.DocumentClient();         
+    const params = {
+        TableName: "POC_Sensor_Data",
+        scan_index_forward: false
+    };   
+    docClient.scan(params, function(err, data) {
+        const {Items} = data;
+        dataMonitor = Items.slice(-1)[0]
+        
+    })
+    return dataMonitor;
 
+}
 
 function renderGraphs (){
     docClient.scan(params, function(err, data) {   
@@ -32,7 +51,7 @@ function renderGraphs (){
         var templuminosidadValues = [];        
         
         var dataOutTemp = []
-        
+
         Items.forEach(function(item) {
             let dataOutValue={};
             dataOutValue.dateHour = item.hora;

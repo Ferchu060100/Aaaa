@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
-import FormGroup from '@material-ui/core/FormGroup';
+
 const useStyles = makeStyles({
   root: {
     height: 300,
@@ -51,9 +51,11 @@ function valuetext(value) {
 export default function Mantenimiento() {
   const classes = useStyles();
   const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
-    checkedC: true,
+    checkedTemperatura: true,
+    checkedHumedad: true,
+    checkedNivelPH: true,
+    checkedEC: true,
+    checkedLuminosidad: true
   });
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -64,10 +66,9 @@ export default function Mantenimiento() {
   container
   direction="row"
   justify="space-between"
-  alignItems="center"
 >
 
-<Grid container direction="column" xs={4} sm={2} spacing={4}>
+<Grid container direction="column" xs={4} sm={2}>
 <Typography component="h1">
           Temperatura
         </Typography>
@@ -95,12 +96,14 @@ export default function Mantenimiento() {
         />
         </div>
         </div>
+        <br></br>
+        <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
         <Typography component="div">
         <Grid component="label" container alignItems="center" spacing={1}>
           <Grid item>Off</Grid>
           <Grid item>
-            <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+            <AntSwitch checked={state.checkedTemperatura} onChange={handleChange} name="checkedTemperatura" />
           </Grid>
           <Grid item>On</Grid>
         </Grid>
@@ -135,12 +138,14 @@ export default function Mantenimiento() {
         />
         </div>
         </div>
+        <br></br>
+        <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
         <Typography component="div">
         <Grid component="label" container alignItems="center" spacing={1}>
           <Grid item>Off</Grid>
           <Grid item>
-            <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+            <AntSwitch checked={state.checkedHumedad} onChange={handleChange} name="checkedHumedad" />
           </Grid>
           <Grid item>On</Grid>
         </Grid>
@@ -175,12 +180,14 @@ export default function Mantenimiento() {
         />
         </div>
         </div>
+        <br></br>
+        <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
         <Typography component="div">
         <Grid component="label" container alignItems="center" spacing={1}>
           <Grid item>Off</Grid>
           <Grid item>
-            <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+            <AntSwitch checked={state.checkedNivelPH} onChange={handleChange} name="checkedNivelPH" />
           </Grid>
           <Grid item>On</Grid>
         </Grid>
@@ -215,12 +222,14 @@ export default function Mantenimiento() {
         />
         </div>
         </div>
+        <br></br>
+        <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
         <Typography component="div">
         <Grid component="label" container alignItems="center" spacing={1}>
           <Grid item>Off</Grid>
           <Grid item>
-            <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+            <AntSwitch checked={state.checkedEC} onChange={handleChange} name="checkedEC" />
           </Grid>
           <Grid item>On</Grid>
         </Grid>
@@ -255,12 +264,14 @@ export default function Mantenimiento() {
         />
         </div>
         </div>
+        <br></br>
+        <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
         <Typography component="div">
         <Grid component="label" container alignItems="center" spacing={1}>
           <Grid item>Off</Grid>
           <Grid item>
-            <AntSwitch checked={state.checkedC} onChange={handleChange} name="checkedC" />
+            <AntSwitch checked={state.checkedLuminosidad} onChange={handleChange} name="checkedLuminosidad" />
           </Grid>
           <Grid item>On</Grid>
         </Grid>

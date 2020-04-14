@@ -3,14 +3,15 @@ import './App.css';
 import { Line } from 'react-chartjs-2';
 import { Card, CardBody } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-<<<<<<< HEAD
 import {BrowserRouter as Router,Route} from 'react-router-dom';
 import SignUp from '../RegistrarUsuario'
 import RegistrarCultivo from '../RegistrarCultivo'
 import SignIn from '../IniciarSesion'
 import Mantenimiento from '../Mantenimiento'
 import Graficos from './Inicio'
-function App() {
+import Monitor from './monitor-component/Monitor';  
+
+/*function App() {
   return (
   <div className="App">
             <Router>
@@ -22,11 +23,9 @@ function App() {
       </Router>
       <ToastContainer />
     </div>
-);
-=======
+  );
+}*/
 //import  dataHumedad  from './Data'
-import Monitor from './monitor-component/Monitor';  
-     
 
 function lineOptions(labels = []) {
   return{
@@ -92,7 +91,7 @@ function data_humedad (datasrc=[]){
                    spanGaps: true,
                }
 		  ]}
- }
+ };
 
 
 function data_luminosidad(datasrc=[]){
@@ -191,7 +190,6 @@ function App(props) {
 
 
   );
->>>>>>> feature-Monitoreo
 }
 
 export default App;

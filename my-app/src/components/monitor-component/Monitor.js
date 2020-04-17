@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import  Button  from '@material-ui/core/Button';
 import TurnOff from '@material-ui/icons/PowerSettingsNew'
-import {Doughnut} from 'react-chartjs-2';
+import {Doughnut, Line} from 'react-chartjs-2';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -20,9 +20,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import { getMonitorData } from '../../index';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { getMonitorData, getSelectSensorData,getDataReport } from '../../index';
 import nosensor from '../../resources/sensornodisponible.png';
 import 'chart.piecelabel.js';
+import DynamicSelect from '../dynamicselect-component/DynamicSelect';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -129,7 +134,11 @@ const useStyles = makeStyles((theme) => ({
   },
   switchButtonSendEmailMonitor: {
     color: "white"
-  }
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
 }));
 
 const dataHalfDoughnutTemperature = {
@@ -316,7 +325,6 @@ var updateMonitorData = function(){
   
   if(dataMonitor!==null)
   {
-    console.log(dataMonitor)
     dataHalfDoughnutTemperature.datasets[0].data = [dataMonitor.temperatura,Math.round((50-dataMonitor.temperatura)*100)/100]
     dataHalfDoughnutHumidity.datasets[0].data = [dataMonitor.humedad,Math.round((100-dataMonitor.humedad)*100)/100]
     dataHalfDoughnutLightLevel.datasets[0].data = [dataMonitor.luminosidad,Math.round((100-dataMonitor.luminosidad)*100)/100]
@@ -338,7 +346,38 @@ export default function Monitor() {
   const [isLightLevelPresent, setLightLevelPresent] = React.useState(true);
   const [isPHPresent, setPHPresent] = React.useState(true);
   const [isECPresent, setECPresent] = React.useState(true);
-
+  const [arraySensor, setArraySensor] =  React.useState([]);
+  const [dataReporte,setDataReporte] =  React.useState([65, 59, 80, 81, 56, 55, 40,50,54,10]);
+  const [selectedSensor,setSelectedSensor] =  React.useState('');
+  const [isLineReportShown,setIsLineReportShown] =  React.useState(false);
+  const dataReportShown = {
+    labels: ['Muestra 1', 'Muestra 2', 'Muestra 3', 'Muestra 4', 'Muestra 5', 'Muestra 6', 'Muestra 7', 'Muestra 8', 'Muestra 9', 'Muestra 10'],
+    datasets: [
+      {
+        label: '',
+        fill: false,
+        lineTension: 0.1,
+        fontColor:'white',
+        backgroundColor: 'white',
+        borderColor: 'white',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: 'white',
+        pointBackgroundColor: 'white',
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+        pointHoverBorderColor: 'rgba(220,220,220,1)',
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: dataReporte
+      },
+      
+    ]
+  };
 
   const handleClickOpen = () => {
     if(!sendMessage)
@@ -366,6 +405,7 @@ export default function Monitor() {
     setValue(newValue);
   };
   function HalfDoughnutTemperature(){
+    
     if(isTemperaturePresent)
     {
       return <Doughnut data={dataHalfDoughnutTemperature} options={optionsHalfDoughnutTemperature}></Doughnut>
@@ -416,7 +456,50 @@ export default function Monitor() {
       return <img src={nosensor} className={classes.imageCenter}></img>
     }
   }
+  function LineReport(){
+    
+    if(selectedSensor!='')
+    {
+      return <Line data={dataReportShown} options={{animation: false}} ></Line>
+    }
+    else
+    {
+      return <img src={nosensor} className={classes.imageCenter}></img>
+    }
+      
+  
+  }
+   function handleChangeSelectionSensor(event){
+    setSelectedSensor(event.target.value)
+    if(selectedSensor!=''){
+      getDataReport(event.target.value).then(
+        function(result){
+          setDataReporte(result);
+          
+        }
+      )
+    }
+    
+  }
+  React.useEffect(() => {
+    
+    getSelectSensorData().then(
+      function(result){
+        setArraySensor(result);
+      }
+    )
+  });
+  
+  
   let switchMonitorClasses = classNames(classes.switchButtonSendEmailMonitor, classes.footerGridItemMonitor)
+  let options = arraySensor.map((data) =>
+                <MenuItem 
+                    key={data.id}
+                    value={data.id}
+                >
+                    {data.name}
+                </MenuItem>
+            );
   return (
     
     <Box className={classes.root}>
@@ -506,6 +589,38 @@ export default function Monitor() {
         </Dialog>
       </TabPanel>
       <TabPanel value={value} index={1}>
+      <Grid container spacing={3}>
+          <Grid item xs={3}>
+            <FormControl  className={classes.formControl}>
+                          <InputLabel id="demo-simple-select-helper-label">Sensores</InputLabel>
+                          <Select
+                              labelId="demo-simple-select-helper-label"
+                              id="demo-simple-select-helper"
+                              onChange = {handleChangeSelectionSensor}
+                          >
+                              <MenuItem value="">
+                              <em>None</em>
+                              </MenuItem>
+                              {options}
+                          </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={9}></Grid>
+        
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={3}></Grid>
+          <Grid item xs={6}><LineReport></LineReport></Grid>
+          <Grid item xs={3}></Grid>
+          
+        </Grid>
+        <Grid container spacing={3}>
+          <Grid item xs={9}>
+          </Grid>
+          <Grid item xs={3} className={classes.footerGridMonitor}>
+            <ColorButton >Comprar Cultivos</ColorButton>
+          </Grid>
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
       </TabPanel>

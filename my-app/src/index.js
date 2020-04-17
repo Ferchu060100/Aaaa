@@ -20,7 +20,8 @@ var recentEventsDateTime = [];
 var humedadValues = [];
 var temperaturaValues = [];
 var luminosidadValues = [];
-var dataMonitor = null
+var dataMonitor = null;
+
 export function getMonitorData() {
     AWS.config.update({
         accessKeyId: 'AKIAVQLA7TQ5KQHYBOE2' ,
@@ -34,12 +35,66 @@ export function getMonitorData() {
     };   
     docClient.scan(params, function(err, data) {
         const {Items} = data;
-        dataMonitor = Items.slice(-1)[0]
+        dataMonitor = Items.sort((a, b) => (a.timestamp_value > b.timestamp_value) ? 1 : -1).slice(-1)[0]
         
     })
     return dataMonitor;
 
 }
+export async function getSelectSensorData() {
+    const params = {
+        TableName: "Sensores",
+    };
+
+    let scanResults = [];
+    let items;
+    items =  await docClient.scan(params).promise();
+    items.Items.forEach(function(obj){
+        let dataOutValue=new Object();;
+        dataOutValue.id= obj.codigo;
+        dataOutValue.name = obj.nombre;
+        scanResults.push(dataOutValue)
+    });
+    params.ExclusiveStartKey  = items.LastEvaluatedKey;
+
+    return scanResults;
+
+};
+
+
+export async function getDataReport(sensor) {
+    const params = {
+        TableName: "POC_Sensor_Data",
+    };
+
+    let scanResults = [];
+    let items;
+    items =  await docClient.scan(params).promise();
+    var BreakException= {};
+    try {
+        items.Items.forEach(function(obj, idx){
+            if(sensor==="1luminosidad")
+            {
+                scanResults.push(obj.luminosidad)
+            }
+            else{
+                scanResults.push(obj.humedad)
+            }
+
+            if (idx === 9) throw BreakException;
+          
+        });
+    } catch (e) {
+        if (e !== BreakException) {
+            scanResults = [];
+            throw e;
+        }
+    }
+    params.ExclusiveStartKey  = items.LastEvaluatedKey;
+
+    return scanResults;
+
+};
 
 function renderGraphs (){
     docClient.scan(params, function(err, data) {   
@@ -96,7 +151,7 @@ ReactDOM.render(<App
     temperaturaValues = {[]}
 />, document.getElementById('root'));
 
-setInterval(renderGraphs,2000);
+//setInterval(renderGraphs,2000);
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA

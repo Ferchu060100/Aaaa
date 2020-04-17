@@ -13,12 +13,8 @@
     "react-bootstrap": "^1.0.0",
     "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.11.0",
-<<<<<<< HEAD
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0",
-=======
     "react-scripts": "^3.4.1",
->>>>>>> feature-Monitoreo
     "react-toastify": "^5.4.1",
     "reactstrap": "^8.1.1"
   },

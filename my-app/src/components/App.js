@@ -1,31 +1,16 @@
 import React  from 'react';
 import './App.css';
-import { Line } from 'react-chartjs-2';
-import { Card, CardBody } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
-<<<<<<< HEAD
 import {BrowserRouter as Router,Route} from 'react-router-dom';
-import SignUp from '../RegistrarUsuario'
-import RegistrarCultivo from '../RegistrarCultivo'
-import SignIn from '../IniciarSesion'
-import Mantenimiento from '../Mantenimiento'
-import Graficos from './Inicio'
-function App() {
-  return (
-  <div className="App">
-            <Router>
-            <Route path="/inicio" component={Graficos}/>
-              <Route path="/registrar" component={SignUp}/>
-              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
-              <Route path="/iniciarsesion" component={SignIn}/>
-              <Route path="/mantenimiento" component={Mantenimiento}/>
-      </Router>
-      <ToastContainer />
-    </div>
-);
-=======
-//import  dataHumedad  from './Data'
+import SignUp from '../RegistrarUsuario';
+import RegistrarCultivo from '../RegistrarCultivo';
+import SignIn from '../IniciarSesion';
+import Mantenimiento from '../Mantenimiento';
+import Graficos from './Inicio';
 import Monitor from './monitor-component/Monitor';  
+
+//import  dataHumedad  from './Data'
+
      
 
 function lineOptions(labels = []) {
@@ -153,13 +138,27 @@ function data_temperatura(datasrc=[]) {
   ]}
 };
 
-
-
+function App() {
+  return (
+  <div className="App">
+            <Router>
+            <Route path="/inicio" component={Graficos}/>
+              <Route path="/registrar" component={SignUp}/>
+              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
+              <Route path="/iniciarsesion" component={SignIn}/>
+              <Route path="/mantenimiento" component={Mantenimiento}/>
+              <Route path="/monitoreo" component={Monitor}/>
+      </Router>
+      <ToastContainer />
+  </div>
+);
+  }
+/*
 function App(props) {
   
   return (
     <Monitor />
-  /*<div className="Appt">
+  <div className="Appt">
       <ToastContainer />
     <div className="container">
        <div style={{ marginTop: '20px'}}>
@@ -187,11 +186,10 @@ function App(props) {
                 <hr />
       </div>
     </div>
-  </div>*/
+  </div>
 
 
   );
->>>>>>> feature-Monitoreo
 }
-
+*/
 export default App;

@@ -1,7 +1,5 @@
 import React  from 'react';
 import './App.css';
-import { Line } from 'react-chartjs-2';
-import { Card, CardBody } from 'reactstrap';
 import { ToastContainer } from 'react-toastify';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
 import SignUp from '../RegistrarUsuario'

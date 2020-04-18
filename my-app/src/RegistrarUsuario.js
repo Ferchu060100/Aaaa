@@ -9,7 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import {BaseURL,signUp} from "./BaseURL"
+import $ from 'jquery';
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -29,10 +30,23 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
+function PostUsuario(){
+  var datos={
+    
+  }
+  $.ajax({
+    url: BaseURL+signUp,
+    method:"POST",
+    data: datos,
+    dataType:'JSON',
+    success: function(respuesta){
+        console.log(respuesta);
+        return respuesta;
+    }
+ });
+}
 export default function SignUp() {
   const classes = useStyles();
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -101,6 +115,7 @@ export default function SignUp() {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={PostUsuario()}
           >
             Registrar
           </Button>

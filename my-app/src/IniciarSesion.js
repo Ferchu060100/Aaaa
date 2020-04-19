@@ -62,6 +62,7 @@ export default function SignIn() {
             autoComplete="current-password"
           />
           <Button
+            href="inicio"
             type="submit"
             fullWidth
             variant="contained"

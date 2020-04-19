@@ -131,7 +131,6 @@ function data_temperatura(datasrc=[]) {
 
 
 export default function Graficos(props) {
-  
   return (
   <div className="Appt">
       <ToastContainer />
@@ -162,7 +161,5 @@ export default function Graficos(props) {
       </div>
     </div>
     </div>
-
-
 );
 }

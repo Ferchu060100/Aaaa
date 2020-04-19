@@ -9,7 +9,7 @@ import Mantenimiento from '../Mantenimiento'
 import Graficos from './Inicio'
 function App() {
   return (
-  <div className="App">
+  <div className="Appt">
             <Router>
             <Route path="/inicio" component={Graficos}/>
               <Route path="/registrar" component={SignUp}/>

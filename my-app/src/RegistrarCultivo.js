@@ -17,14 +17,11 @@ function PostCultivo(datos){
     url: BaseURL+cultivo,
     method:"POST",
     data: datos,
-    cache: false,
-    contentType: false,
-    processData: false,
     dataType:'JSON',
     success: function(respuesta){
         return respuesta;
     }
- });
+  });
 }
 function GetCultivo(){
   $.ajax({
@@ -77,8 +74,9 @@ export default function RegistrarCultivo() {
     GetCultivo();
   };
   const registrarCultivoOnClick = () =>{
-    var nombre = $('#nombreCultivo').text;
-    var planta=$('#plantaSelect option:selected').text();
+    var nombre=document.getElementById('nombreCultivo').value;
+    var plantaSel=document.getElementById('plantaSelect');
+    var planta=plantaSel.options[plantaSel.selectedIndex].text;
     var datos={
       nombre: nombre,
       planta: planta

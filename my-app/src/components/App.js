@@ -153,9 +153,24 @@ function data_temperatura(datasrc=[]) {
 
 
 function App(props) {
-  
+  /*
+                <Route path="/monitor" component={Monitor}/>
+                <Route path="/registrarcultivo" component={RegistrarCultivo}/>
+              <Route path="/iniciarsesion" component={SignIn}/>
+              <Route path="/mantenimiento" component={Mantenimiento}/>
+  */ 
   return (
-    <Monitor />
+    <div className="Appt">
+            <Router>
+              <Route exact path="/registrar" component={SignUp}/>
+              <Route exact path="/monitor" component={Monitor}/>
+              <Route exact path="/registrarcultivo" component={RegistrarCultivo}/>
+              <Route exact path="/" component={SignIn}/>
+              <Route exact path="/mantenimiento" component={Mantenimiento}/>
+      </Router>
+      <ToastContainer />
+    </div>
+    /*<Monitor />*/
   /*<div className="Appt">
       <ToastContainer />
     <div className="container">

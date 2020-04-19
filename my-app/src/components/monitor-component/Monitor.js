@@ -316,7 +316,7 @@ var updateMonitorData = function(){
   
   if(dataMonitor!==null)
   {
-    console.log(dataMonitor)
+    //console.log(dataMonitor)
     dataHalfDoughnutTemperature.datasets[0].data = [dataMonitor.temperatura,Math.round((50-dataMonitor.temperatura)*100)/100]
     dataHalfDoughnutHumidity.datasets[0].data = [dataMonitor.humedad,Math.round((100-dataMonitor.humedad)*100)/100]
     dataHalfDoughnutLightLevel.datasets[0].data = [dataMonitor.luminosidad,Math.round((100-dataMonitor.luminosidad)*100)/100]

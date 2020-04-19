@@ -7,7 +7,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import {BaseURL,signIn} from "./BaseURL"
+import $ from "jquery"
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -27,7 +28,25 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-
+function IniciarSesionOnClick(){
+  var username=document.getElementById('email').value;
+  var password=document.getElementById('password').value;
+  var datos={
+    "username": username,
+    "password": password
+  }
+  datos=JSON.stringify(datos);
+  $.ajax({
+    url: BaseURL+signIn,
+    method:"POST",
+    data: datos,
+    dataType:'JSON',
+    success: function(respuesta){
+      if(respuesta.result=="ok")
+        window.location.href='monitor'
+    }
+ });
+}
 export default function SignIn() {
   const classes = useStyles();
 
@@ -62,11 +81,10 @@ export default function SignIn() {
             autoComplete="current-password"
           />
           <Button
-            href="inicio"
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
+            onClick={IniciarSesionOnClick}
             className={classes.submit}
           >
             Iniciar Sesión

@@ -81,7 +81,7 @@ export default function RegistrarCultivo() {
       nombre: nombre,
       planta: planta
     }
-    PostCultivo(datos);
+    PostCultivo(JSON.stringify(datos));
   };
   return (
     <div>

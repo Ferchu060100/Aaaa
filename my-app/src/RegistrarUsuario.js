@@ -31,17 +31,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 function PostUsuario(){
+  var name=document.getElementById('firstName').value;
+  var familyName=document.getElementById('lastName').value;
+  var username=document.getElementById('email').value;
+  var password=document.getElementById('password').value;
   var datos={
-    
+    "name": name,
+    "family_name": familyName,
+    "username": username,
+    "password": password
   }
+  datos=JSON.stringify(datos);
   $.ajax({
     url: BaseURL+signUp,
     method:"POST",
     data: datos,
     dataType:'JSON',
     success: function(respuesta){
-        console.log(respuesta);
-        return respuesta;
+      if(respuesta.result=="ok")
+        window.location.href='/'
     }
  });
 }
@@ -110,12 +118,11 @@ export default function SignUp() {
             </Grid>
           </Grid>
           <Button
-            type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={PostUsuario()}
+            onClick={PostUsuario}
           >
             Registrar
           </Button>

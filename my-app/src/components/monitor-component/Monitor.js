@@ -22,6 +22,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import { getMonitorData } from '../../index';
 import nosensor from '../../resources/sensornodisponible.png';
+import InputLabel from "@material-ui/core/InputLabel";
+import Input from "@material-ui/core/Input";
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import FormControl from "@material-ui/core/FormControl";
+import $ from 'jquery';
+import {BaseURL,cultivo} from "./BaseURL"
 import 'chart.piecelabel.js';
 
 function TabPanel(props) {
@@ -41,11 +48,37 @@ function TabPanel(props) {
   );
 }
 
-
-
-
-
-
+function PostCultivo(datos){
+  $.ajax({
+    url: BaseURL+cultivo,
+    method:"POST",
+    data: datos,
+    dataType:'JSON',
+    success: function(respuesta){
+        return respuesta;
+    }
+  });
+}
+function GetCultivo(){
+  $.ajax({
+    url: BaseURL+cultivo,
+    method:"GET",
+    dataType:'JSON',
+    success: function(respuesta){
+      PlantaSelectOptions(respuesta)
+    }
+ });
+}
+function PlantaSelectOptions(data){
+  if($('#plantaSelect option').length===1){
+    var cont=1;
+    var select=$('#plantaSelect');
+    data.data.forEach(element => {
+      select.append(new Option(element.planta,cont));
+      cont++;
+    });
+  }
+}
 
 TabPanel.propTypes = {
   children: PropTypes.node,
@@ -89,6 +122,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120
+  },
   root: {
     flexGrow: 1,
     backgroundColor: "#333433",
@@ -338,8 +379,10 @@ export default function Monitor() {
   const [isLightLevelPresent, setLightLevelPresent] = React.useState(true);
   const [isPHPresent, setPHPresent] = React.useState(true);
   const [isECPresent, setECPresent] = React.useState(true);
-
-
+  const [planta, setPlanta] = React.useState("");
+  const handleChangePlantaSelect = event => {
+    setPlanta(Number(event.target.value) || "");
+  };
   const handleClickOpen = () => {
     if(!sendMessage)
     {
@@ -417,6 +460,28 @@ export default function Monitor() {
     }
   }
   let switchMonitorClasses = classNames(classes.switchButtonSendEmailMonitor, classes.footerGridItemMonitor)
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const handleClickOpenCultivoDialog = () => {
+    console.log('funciona');
+    setOpenDialog(true);
+    selectCultivoOnClick();
+  };
+  const handleCloseCultivoDialog = () => {
+    setOpenDialog(false);
+  };
+  const selectCultivoOnClick = () =>{
+    GetCultivo();
+  };
+  const registrarCultivoOnClick = () =>{
+    var nombre=document.getElementById('nombreCultivo').value;
+    var plantaSel=document.getElementById('plantaSelect');
+    var planta=plantaSel.options[plantaSel.selectedIndex].text;
+    var datos={
+      nombre: nombre,
+      planta: planta
+    }
+    PostCultivo(JSON.stringify(datos));
+  };
   return (
     
     <Box className={classes.root}>
@@ -433,7 +498,7 @@ export default function Monitor() {
         
         <Grid container spacing={3}>
           <Grid item xs={3}>
-            <ColorButton >Nuevo Cultivo</ColorButton>
+            <ColorButton onClick={handleClickOpenCultivoDialog}>Nuevo Cultivo</ColorButton>
             <ColorButton >Visualizar Histórico</ColorButton>
           </Grid>
           <Grid item xs={6}>
@@ -504,6 +569,37 @@ export default function Monitor() {
             </Button>
           </DialogActions>
         </Dialog>
+        <Dialog open={openDialog} onClose={handleCloseCultivoDialog} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Crear Nuevo Cultivo</DialogTitle>
+        <DialogContent>
+        <form className={classes.container}>
+        <TextField
+            autoFocus
+            margin="dense"
+            id="nombreCultivo"
+            label="Nombre del Cultivo"
+            type="text"
+            fullWidth
+          />
+             <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="plantaInputLabel">Planta</InputLabel>
+              <Select
+                id="plantaSelect"
+                native
+                value={planta}
+                onChange={handleChangePlantaSelect}
+                input={<Input id="plantaInputLabel" />}>
+                  <option aria-label="None" value="" />
+              </Select>
+            </FormControl>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={registrarCultivoOnClick} color="primary" justify="center">
+            Registrar
+          </Button>
+        </DialogActions>
+      </Dialog>
       </TabPanel>
       <TabPanel value={value} index={1}>
       </TabPanel>

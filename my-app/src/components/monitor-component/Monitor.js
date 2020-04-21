@@ -34,6 +34,7 @@ import FormControl from "@material-ui/core/FormControl";
 import $ from 'jquery';
 import {BaseURL,cultivo} from "./BaseURL"
 import 'chart.piecelabel.js';
+import DynamicSelect from '../dynamicselect-component/DynamicSelect';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -423,6 +424,7 @@ export default function Monitor() {
   const handleChangePlantaSelect = event => {
     setPlanta(Number(event.target.value) || "");
   };
+
   const handleClickOpen = () => {
     if(!sendMessage)
     {
@@ -536,7 +538,6 @@ export default function Monitor() {
   
   
   let switchMonitorClasses = classNames(classes.switchButtonSendEmailMonitor, classes.footerGridItemMonitor)
-
   let options = arraySensor.map((data) =>
                 <MenuItem 
                     key={data.id}

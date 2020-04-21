@@ -10,6 +10,40 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import {BaseURL,cultivo} from "./BaseURL"
+import $ from 'jquery';
+function PostCultivo(datos){
+  $.ajax({
+    url: BaseURL+cultivo,
+    method:"POST",
+    data: datos,
+    dataType:'JSON',
+    success: function(respuesta){
+        return respuesta;
+    }
+  });
+}
+function GetCultivo(){
+  $.ajax({
+    url: BaseURL+cultivo,
+    method:"GET",
+    dataType:'JSON',
+    success: function(respuesta){
+      PlantaSelectOptions(respuesta)
+    }
+ });
+}
+function PlantaSelectOptions(data){
+  if($('#plantaSelect option').length===1){
+    var cont=1;
+    var select=$('#plantaSelect');
+    data.data.forEach(element => {
+      select.append(new Option(element.planta,cont));
+      cont++;
+    });
+  }
+}
+
 export default function RegistrarCultivo() {
   const useStyles = makeStyles(theme => ({
         container: {
@@ -30,12 +64,25 @@ export default function RegistrarCultivo() {
   };
   const handleClickOpen = () => {
     setOpen(true);
+    selectCultivoOnClick();
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
+  const selectCultivoOnClick = () =>{
+    GetCultivo();
+  };
+  const registrarCultivoOnClick = () =>{
+    var nombre=document.getElementById('nombreCultivo').value;
+    var plantaSel=document.getElementById('plantaSelect');
+    var planta=plantaSel.options[plantaSel.selectedIndex].text;
+    var datos={
+      nombre: nombre,
+      planta: planta
+    }
+    PostCultivo(JSON.stringify(datos));
+  };
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -48,27 +95,26 @@ export default function RegistrarCultivo() {
         <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="nombreCultivo"
             label="Nombre del Cultivo"
             type="text"
             fullWidth
           />
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="demo-dialog-native">Planta</InputLabel>
+             <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="plantaInputLabel">Planta</InputLabel>
               <Select
+                id="plantaSelect"
                 native
                 value={planta}
                 onChange={handleChange}
-                input={<Input id="demo-dialog-native" />}
-              >
-                <option aria-label="None" value="" />
-                <option value={10}>Lechuga</option>
+                input={<Input id="plantaInputLabel" />}>
+                  <option aria-label="None" value="" />
               </Select>
             </FormControl>
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary" justify="center">
+          <Button onClick={registrarCultivoOnClick} color="primary" justify="center">
             Registrar
           </Button>
         </DialogActions>

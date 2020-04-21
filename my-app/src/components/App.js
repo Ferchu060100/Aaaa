@@ -2,16 +2,29 @@ import React  from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
-import SignUp from '../RegistrarUsuario';
-import RegistrarCultivo from '../RegistrarCultivo';
-import SignIn from '../IniciarSesion';
-import Mantenimiento from '../Mantenimiento';
-import Graficos from './Inicio';
+
+import SignUp from '../RegistrarUsuario'
+import RegistrarCultivo from '../RegistrarCultivo'
+import SignIn from '../IniciarSesion'
+import Mantenimiento from '../Mantenimiento'
+import Graficos from './Inicio'
 import Monitor from './monitor-component/Monitor';  
 
+/*function App() {
+  return (
+  <div className="Appt">
+            <Router>
+            <Route path="/inicio" component={Graficos}/>
+              <Route path="/registrar" component={SignUp}/>
+              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
+              <Route path="/iniciarsesion" component={SignIn}/>
+              <Route path="/mantenimiento" component={Mantenimiento}/>
+      </Router>
+      <ToastContainer />
+    </div>
+  );
+}*/
 //import  dataHumedad  from './Data'
-
-     
 
 function lineOptions(labels = []) {
   return{
@@ -77,7 +90,7 @@ function data_humedad (datasrc=[]){
                    spanGaps: true,
                }
 		  ]}
- }
+ };
 
 
 function data_luminosidad(datasrc=[]){
@@ -153,43 +166,6 @@ function App() {
   </div>
 );
   }
-/*
-function App(props) {
-  
-  return (
-    <Monitor />
-  <div className="Appt">
-      <ToastContainer />
-    <div className="container">
-       <div style={{ marginTop: '20px'}}>
-                <Card >
-                    <CardBody>                      
-                      <Line height={undefined} data={data_humedad(props.humedadValues)} options={lineOptions(props.labels)} />
-                    </CardBody>
-                </Card>
-                <hr />
-      </div>
-     <div style={{ marginTop: '20px'}}>
-                <Card >
-                    <CardBody>                      
-                      <Line height={undefined} data={data_luminosidad(props.luminosidadValues)} options={lineOptions(props.labels)} />
-                    </CardBody>
-                </Card>
-                <hr />
-      </div>
-      <div style={{ marginTop: '20px'}}>
-                <Card >
-                    <CardBody>                      
-                      <Line height={undefined} data={data_temperatura(props.temperaturaValues)} options={lineOptions(props.labels)} />
-                    </CardBody>
-                </Card>
-                <hr />
-      </div>
-    </div>
-  </div>
 
 
-  );
-}
-*/
 export default App;

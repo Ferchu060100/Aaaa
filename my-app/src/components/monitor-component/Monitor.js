@@ -26,15 +26,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { getMonitorData, getSelectSensorData,getDataReport } from '../../index';
 import nosensor from '../../resources/sensornodisponible.png';
-import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
-import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import FormControl from "@material-ui/core/FormControl";
 import $ from 'jquery';
 import {BaseURL,cultivo} from "./BaseURL"
 import 'chart.piecelabel.js';
-import DynamicSelect from '../dynamicselect-component/DynamicSelect';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

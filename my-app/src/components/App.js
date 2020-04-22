@@ -2,11 +2,10 @@ import React  from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
-import SignUp from '../RegistrarUsuario'
-import RegistrarCultivo from '../RegistrarCultivo'
-import SignIn from '../IniciarSesion'
-import Mantenimiento from '../Mantenimiento'
-import Graficos from './Inicio'
+import SignUp from './signup-component/RegistrarUsuario'
+import SignIn from './signin-component/IniciarSesion'
+import Mantenimiento from './mantenimiento-component/Mantenimiento'
+import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
 
 /*function App() {
@@ -164,7 +163,6 @@ function App(props) {
             <Router>
               <Route exact path="/registrar" component={SignUp}/>
               <Route exact path="/monitor" component={Monitor}/>
-              <Route exact path="/registrarcultivo" component={RegistrarCultivo}/>
               <Route exact path="/" component={SignIn}/>
               <Route exact path="/mantenimiento" component={Mantenimiento}/>
       </Router>

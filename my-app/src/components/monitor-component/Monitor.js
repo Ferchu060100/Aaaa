@@ -28,7 +28,7 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import FormControl from "@material-ui/core/FormControl";
 import $ from 'jquery';
-import {BaseURL,cultivo} from "./BaseURL"
+import {BaseURL,cultivo} from "../BaseURL"
 import 'chart.piecelabel.js';
 
 function TabPanel(props) {

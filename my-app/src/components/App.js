@@ -8,21 +8,6 @@ import Mantenimiento from './mantenimiento-component/Mantenimiento'
 import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
 
-/*function App() {
-  return (
-  <div className="Appt">
-            <Router>
-            <Route path="/inicio" component={Graficos}/>
-              <Route path="/registrar" component={SignUp}/>
-              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
-              <Route path="/iniciarsesion" component={SignIn}/>
-              <Route path="/mantenimiento" component={Mantenimiento}/>
-      </Router>
-      <ToastContainer />
-    </div>
-  );
-}*/
-//import  dataHumedad  from './Data'
 
 function lineOptions(labels = []) {
   return{
@@ -149,58 +134,18 @@ function data_temperatura(datasrc=[]) {
   ]}
 };
 
-
-
-function App(props) {
-  /*
-                <Route path="/monitor" component={Monitor}/>
-                <Route path="/registrarcultivo" component={RegistrarCultivo}/>
-              <Route path="/iniciarsesion" component={SignIn}/>
-              <Route path="/mantenimiento" component={Mantenimiento}/>
-  */ 
+function App() {
   return (
-    <div className="Appt">
+  <div className="App">
             <Router>
               <Route exact path="/registrar" component={SignUp}/>
               <Route exact path="/monitor" component={Monitor}/>
               <Route exact path="/" component={SignIn}/>
-              <Route exact path="/mantenimiento" component={Mantenimiento}/>
       </Router>
       <ToastContainer />
-    </div>
-    /*<Monitor />*/
-  /*<div className="Appt">
-      <ToastContainer />
-    <div className="container">
-       <div style={{ marginTop: '20px'}}>
-                <Card >
-                    <CardBody>                      
-                      <Line height={undefined} data={data_humedad(props.humedadValues)} options={lineOptions(props.labels)} />
-                    </CardBody>
-                </Card>
-                <hr />
-      </div>
-     <div style={{ marginTop: '20px'}}>
-                <Card >
-                    <CardBody>                      
-                      <Line height={undefined} data={data_luminosidad(props.luminosidadValues)} options={lineOptions(props.labels)} />
-                    </CardBody>
-                </Card>
-                <hr />
-      </div>
-      <div style={{ marginTop: '20px'}}>
-                <Card >
-                    <CardBody>                      
-                      <Line height={undefined} data={data_temperatura(props.temperaturaValues)} options={lineOptions(props.labels)} />
-                    </CardBody>
-                </Card>
-                <hr />
-      </div>
-    </div>
-  </div>*/
+  </div>
+);
+  }
 
-
-  );
-}
 
 export default App;

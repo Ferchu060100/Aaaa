@@ -10,16 +10,44 @@ import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box'
 import {BaseURL,sensores} from '../BaseURL'
 import $ from 'jquery';
+
 function GetSensores(){
-  $.ajax({
-    url: BaseURL+sensores,
-    method:"GET",
-    dataType:'JSON',
-    success: function(respuesta){
-      console.log(respuesta.data)
+    var humedadMin=document.getElementById('humedadMinima');
+    var humedadMax=document.getElementById('humedadMaxima');
+    var luminosidadMin=document.getElementById('LuminosidadMinima');
+    var luminosidadMax=document.getElementById('LuminosidadMaxima');
+    if(humedadMin.value=='' && luminosidadMin.value=='')
+    {
+      var phMin=document.getElementById('PhMinima');
+      var phMax=document.getElementById('PhMaxima');
+      var ecMin=document.getElementById('ECMinima');
+      var ecMax=document.getElementById('ECMaxima');
+      var tempMin=document.getElementById('temperaturaMinima');
+      var tempMax=document.getElementById('temperaturaMaxima');
+      $.ajax({  
+        url: BaseURL+sensores,
+        method:"GET",
+        dataType:'JSON',
+        success: function(respuesta){
+          for(var element in respuesta.data){      
+            switch(respuesta.data[element].nombre) {
+              case 'humedad':
+                  humedadMin.value=respuesta.data[element].recomendado_min;
+                  humedadMax.value=respuesta.data[element].recomendado_max;
+                  //$("#HumedadMaximaSlider").prop('value',humedadMax);
+                break;
+              case 'luminosidad':
+                  luminosidadMax.value=respuesta.data[element].recomendado_max;
+                  luminosidadMin.value=respuesta.data[element].recomendado_min;
+                  break;
+            }
+          }
+        }
+     });
     }
- });
+
 }
+
 const useStyles = makeStyles({
   root: {
     height: 300,
@@ -62,6 +90,9 @@ function valuetext(value) {
   return `${value}°C`;
 }
 export default function Mantenimiento() {
+  $(document).ready(()=>{
+    GetSensores();
+  })
   const classes = useStyles();
   const [state, setState] = React.useState({
     checkedTemperatura: true,
@@ -73,9 +104,6 @@ export default function Mantenimiento() {
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
   };
-  $(document).ready(()=>{
-    GetSensores();
-  })
   return (
     <Container component="main" maxWidth="lg">
       <Grid
@@ -100,7 +128,6 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <br></br>  
@@ -108,12 +135,11 @@ export default function Mantenimiento() {
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="temperaturaMinima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -130,7 +156,6 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <br></br>
@@ -138,12 +163,11 @@ export default function Mantenimiento() {
         display="flex"
         flexWrap="wrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
         <TextField
           id="temperaturaMaxima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -184,21 +208,20 @@ export default function Mantenimiento() {
           Mínima
         </Typography>
         <Slider
+          id="HumedadMinimaSlider"
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="humedadMinima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -213,21 +236,20 @@ export default function Mantenimiento() {
           Máxima
         </Typography>
         <Slider
+        id="HumedadMaximaSlider"
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="humedadMaxima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -270,19 +292,17 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
                 <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="PhMinima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -299,19 +319,17 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
                 <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="PhMaxima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -354,19 +372,17 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="ECMinima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -383,19 +399,17 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
-          id="PhMaxima"
-          label="Number"
+          id="ECMaxima"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -439,19 +453,17 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="LuminosidadMinima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{
@@ -468,19 +480,17 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
         <Box
         display="flex"
         flexWrap="nowrap"
         m={1}
-        bgcolor="background.paper"
         css={{ maxWidth: 70 }}
       >
                 <TextField
           id="LuminosidadMaxima"
-          label="Number"
+          label="Valor"
           type="number"
           size="small"
           InputLabelProps={{

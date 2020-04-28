@@ -6,6 +6,47 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
+import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box'
+import {BaseURL,sensores} from '../BaseURL'
+import $ from 'jquery';
+
+function GetSensores(){
+    var humedadMin=document.getElementById('humedadMinima');
+    var humedadMax=document.getElementById('humedadMaxima');
+    var luminosidadMin=document.getElementById('LuminosidadMinima');
+    var luminosidadMax=document.getElementById('LuminosidadMaxima');
+    if(humedadMin.value=='' && luminosidadMin.value=='')
+    {
+      var phMin=document.getElementById('PhMinima');
+      var phMax=document.getElementById('PhMaxima');
+      var ecMin=document.getElementById('ECMinima');
+      var ecMax=document.getElementById('ECMaxima');
+      var tempMin=document.getElementById('temperaturaMinima');
+      var tempMax=document.getElementById('temperaturaMaxima');
+      $.ajax({  
+        url: BaseURL+sensores,
+        method:"GET",
+        dataType:'JSON',
+        success: function(respuesta){
+          for(var element in respuesta.data){      
+            switch(respuesta.data[element].nombre) {
+              case 'humedad':
+                  humedadMin.value=respuesta.data[element].recomendado_min;
+                  humedadMax.value=respuesta.data[element].recomendado_max;
+                  //$("#HumedadMaximaSlider").prop('value',humedadMax);
+                break;
+              case 'luminosidad':
+                  luminosidadMax.value=respuesta.data[element].recomendado_max;
+                  luminosidadMin.value=respuesta.data[element].recomendado_min;
+                  break;
+            }
+          }
+        }
+     });
+    }
+
+}
 
 const useStyles = makeStyles({
   root: {
@@ -49,6 +90,9 @@ function valuetext(value) {
   return `${value}°C`;
 }
 export default function Mantenimiento() {
+  $(document).ready(()=>{
+    GetSensores();
+  })
   const classes = useStyles();
   const [state, setState] = React.useState({
     checkedTemperatura: true,
@@ -69,9 +113,13 @@ export default function Mantenimiento() {
 >
 
 <Grid container direction="column" xs={4} sm={2}>
+  <br></br>
+<div class="row" style={{justifyContent: 'center'}}>
 <Typography component="h1">
           Temperatura
         </Typography>
+</div>
+<br></br>
         <div class="row" style={{justifyContent: 'space-around'}}>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -80,9 +128,26 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <br></br>  
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="temperaturaMinima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>   
         </div>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -91,11 +156,30 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <br></br>
+        <Box
+        display="flex"
+        flexWrap="wrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+        <TextField
+          id="temperaturaMaxima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+      </Box>
         </div>
         </div>
+        <br></br>
+        <br></br>
         <br></br>
         <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
@@ -111,33 +195,73 @@ export default function Mantenimiento() {
         </div>
 </Grid>
   <Grid item xs={4} sm={2}>
-<Typography component="h1">
+  <br></br>
+  <div class="row" style={{justifyContent: 'center'}}>
+  <Typography component="h1">
           Humedad
         </Typography>
+  </div>
+  <br></br>
         <div class="row" style={{justifyContent: 'space-around'}}>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
           Mínima
         </Typography>
         <Slider
+          id="HumedadMinimaSlider"
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="humedadMinima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
           Máxima
         </Typography>
         <Slider
+        id="HumedadMaximaSlider"
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="humedadMaxima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         </div>
+        <br></br>
+        <br></br>
         <br></br>
         <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
@@ -153,9 +277,13 @@ export default function Mantenimiento() {
         </div>
 </Grid>
 <Grid item xs={4} sm={2}>
+<br></br>
+<div class="row" style={{justifyContent: 'center'}}>
 <Typography component="h1">
           Nivel de Ph
         </Typography>
+  </div>
+  <br></br>
         <div class="row" style={{justifyContent: 'space-around'}}>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -164,9 +292,25 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+                <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="PhMinima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -175,11 +319,29 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+                <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="PhMaxima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         </div>
+        <br></br>
+        <br></br>
         <br></br>
         <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
@@ -195,9 +357,13 @@ export default function Mantenimiento() {
         </div>
 </Grid>
 <Grid item xs={4} sm={2}>
+<br></br>
+<div class="row" style={{justifyContent: 'center'}}>
 <Typography component="h1">
           EC
         </Typography>
+  </div>
+  <br></br>
         <div class="row" style={{justifyContent: 'space-around'}}>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -206,9 +372,25 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="ECMinima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -217,11 +399,29 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="ECMaxima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         </div>
+        <br></br>
+        <br></br>
         <br></br>
         <br></br>
         <div class="row" style={{justifyContent: 'center'}}>
@@ -237,9 +437,14 @@ export default function Mantenimiento() {
         </div>
 </Grid>
 <Grid item xs={4} sm={2}>
+<br></br>
+<div class="row" style={{justifyContent: 'center'}}>
+<br></br>
 <Typography component="h1">
           Luminosidad
         </Typography> 
+  </div>
+  <br></br>
         <div class="row" style={{justifyContent: 'space-around'}}>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -248,9 +453,25 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="LuminosidadMinima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         <div class="column" className={classes.root}>
         <Typography variant="subtitle2">
@@ -259,11 +480,29 @@ export default function Mantenimiento() {
         <Slider
           orientation="vertical"
           getAriaValueText={valuetext}
-          defaultValue={30}
           aria-labelledby="vertical-slider"
         />
+        <Box
+        display="flex"
+        flexWrap="nowrap"
+        m={1}
+        css={{ maxWidth: 70 }}
+      >
+                <TextField
+          id="LuminosidadMaxima"
+          label="Valor"
+          type="number"
+          size="small"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />   
+      </Box>
         </div>
         </div>
+        <br></br>
+        <br></br>
         <br></br>
         <br></br>
         <div class="row" style={{justifyContent: 'center'}}>

@@ -29,7 +29,8 @@ import nosensor from '../../resources/sensornodisponible.png';
 import Input from "@material-ui/core/Input";
 import TextField from '@material-ui/core/TextField';
 import $ from 'jquery';
-import {BaseURL,cultivo} from "./BaseURL"
+import {BaseURL,cultivo} from "../BaseURL"
+import Mantenimiento from '../mantenimiento-component/Mantenimiento';
 import 'chart.piecelabel.js';
 
 function TabPanel(props) {
@@ -90,7 +91,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`
   };
 }
 
@@ -765,6 +766,8 @@ export default function Monitor() {
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <Mantenimiento>
+        </Mantenimiento>
       </TabPanel>
 
     </Box>

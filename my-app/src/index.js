@@ -4,6 +4,7 @@ import AWS from "aws-sdk";
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './components/serviceWorker';
+import { BaseURL } from './BaseURL';
 
 AWS.config.update({
     accessKeyId: 'AKIAVQLA7TQ5KQHYBOE2' ,
@@ -20,59 +21,61 @@ var recentEventsDateTime = [];
 var humedadValues = [];
 var temperaturaValues = [];
 var luminosidadValues = [];
-var dataMonitor = null;
 
-export function getMonitorData() {
-    AWS.config.update({
-        accessKeyId: 'AKIAVQLA7TQ5KQHYBOE2' ,
-        secretAccessKey: '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' ,
-        region: "us-east-2",
-      });
-    const docClient = new AWS.DynamoDB.DocumentClient();         
-    const params = {
-        TableName: "POC_Sensor_Data",
-        scan_index_forward: false
-    };   
-    docClient.scan(params, function(err, data) {
-        const {Items} = data;
-        dataMonitor = Items.sort((a, b) => (a.timestamp_value > b.timestamp_value) ? 1 : -1).slice(-1)[0]
-        
-    })
-    return dataMonitor;
 
-}
-export async function getSelectSensorData() {
-    const params = {
-        TableName: "Sensores",
-    };
-
-    let scanResults = [];
-    let items;
-    items =  await docClient.scan(params).promise();
-    items.Items.forEach(function(obj){
-        let dataOutValue=new Object();;
-        dataOutValue.id= obj.codigo;
-        dataOutValue.name = obj.nombre;
-        scanResults.push(dataOutValue)
+export async function getMonitorData(){
+    let endPoint = '/sensores/data'
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
     });
-    params.ExclusiveStartKey  = items.LastEvaluatedKey;
+    let responseJWT = await response.json();
 
-    return scanResults;
+    if(responseJWT.result == 'ok'){
+
+        return responseJWT.data.sort((a, b) => (a.timestamp_value > b.timestamp_value) ? 1 : -1).slice(-1)[0]
+    }
+    else{
+        return []
+    }
+}
+
+
+export async function getSelectSensorData() {
+    let endPoint = '/sensores'
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
+    });
+    let responseJWT = await response.json();
+
+    if(responseJWT.result == 'ok'){
+        let scanResults = [];
+        responseJWT.data.forEach(function(obj){
+            let dataOutValue=new Object();;
+            dataOutValue.id= obj.codigo;
+            dataOutValue.name = obj.nombre;
+            scanResults.push(dataOutValue)
+        });
+        return scanResults;
+    }
+    else{
+        return [];
+    }
+    
 
 };
 
 
 export async function getDataReport(sensor) {
-    const params = {
-        TableName: "POC_Sensor_Data",
-    };
-
-    let scanResults = [];
-    let items;
-    items =  await docClient.scan(params).promise();
-    var BreakException= {};
-    try {
-        items.Items.forEach(function(obj, idx){
+    let endPoint = '/sensores/data'
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
+    });
+    let responseJWT = await response.json();
+    
+    if(responseJWT.result == 'ok'){
+        let scanResults = [];
+        console.log(responseJWT)
+        responseJWT.data.forEach(function(obj, idx){
             if(sensor==="1luminosidad")
             {
                 scanResults.push(obj.luminosidad)
@@ -81,18 +84,15 @@ export async function getDataReport(sensor) {
                 scanResults.push(obj.humedad)
             }
 
-            if (idx === 9) throw BreakException;
+            if (idx === 9) return scanResults;
           
         });
-    } catch (e) {
-        if (e !== BreakException) {
-            scanResults = [];
-            throw e;
-        }
+        return scanResults
     }
-    params.ExclusiveStartKey  = items.LastEvaluatedKey;
-
-    return scanResults;
+    else{
+        return []
+    }
+    
 
 };
 

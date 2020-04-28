@@ -8,6 +8,7 @@ import SignIn from '../IniciarSesion';
 import Mantenimiento from '../Mantenimiento';
 import Graficos from './Inicio';
 import Monitor from './monitor-component/Monitor';  
+import Historico  from './monitor-component/Historico';
 
 
 function lineOptions(labels = []) {
@@ -145,6 +146,7 @@ function App() {
               <Route path="/iniciarsesion" component={SignIn}/>
               <Route path="/mantenimiento" component={Mantenimiento}/>
               <Route path="/monitoreo" component={Monitor}/>
+              <Route path="/historico" component={Historico}/>
       </Router>
       <ToastContainer />
   </div>

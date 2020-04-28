@@ -172,10 +172,7 @@ const useStyles = makeStyles((theme) => ({
   switchButtonSendEmailMonitor: {
     color: "white"
   },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
+  
 }));
 
 const dataHalfDoughnutTemperature = {
@@ -357,17 +354,18 @@ const optionsDoughnutEC = {
   },
   cutoutPercentage: 60
 }
+
+
 var updateMonitorData = function(){
-  var dataMonitor = getMonitorData();
   
-  if(dataMonitor!==null)
-  {
-    dataHalfDoughnutTemperature.datasets[0].data = [dataMonitor.temperatura,Math.round((50-dataMonitor.temperatura)*100)/100]
-    dataHalfDoughnutHumidity.datasets[0].data = [dataMonitor.humedad,Math.round((100-dataMonitor.humedad)*100)/100]
-    dataHalfDoughnutLightLevel.datasets[0].data = [dataMonitor.luminosidad,Math.round((100-dataMonitor.luminosidad)*100)/100]
-  }
-  
-  
+  getMonitorData().then(
+    (dataMonitor) => {
+      console.log(dataMonitor)
+      dataHalfDoughnutTemperature.datasets[0].data = [dataMonitor.temperatura,Math.round((50-dataMonitor.temperatura)*100)/100]
+      dataHalfDoughnutHumidity.datasets[0].data = [dataMonitor.humedad,Math.round((100-dataMonitor.humedad)*100)/100]
+      dataHalfDoughnutLightLevel.datasets[0].data = [dataMonitor.luminosidad,Math.round((100-dataMonitor.luminosidad)*100)/100]
+    }
+  )
    
 }
 
@@ -377,6 +375,7 @@ export default function Monitor() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
+  const [openHistorial, setOpenHistorial] = React.useState(false);
   const [sendMessage, setSendMessage] = React.useState(false);
   const [isTemperaturePresent, setTemperaturePresent] = React.useState(true);
   const [isHumidityPresent, setHumidityPresent] = React.useState(true);
@@ -385,6 +384,7 @@ export default function Monitor() {
   const [isECPresent, setECPresent] = React.useState(true);
   const [planta, setPlanta] = React.useState("");
   const [arraySensor, setArraySensor] =  React.useState([]);
+  const [arrayHistorico, setArrayHistorico] =  React.useState([{'id':1, 'name': 'Actual'},{'id':2, 'name': 'Anterior'}]);
   const [dataReporte,setDataReporte] =  React.useState([65, 59, 80, 81, 56, 55, 40,50,54,10]);
   const [selectedSensor,setSelectedSensor] =  React.useState('');
   const [isLineReportShown,setIsLineReportShown] =  React.useState(false);
@@ -420,7 +420,9 @@ export default function Monitor() {
   const handleChangePlantaSelect = event => {
     setPlanta(Number(event.target.value) || "");
   };
-
+  const handleOpenHistorial = () => {
+    setOpenHistorial(true);
+  }
   const handleClickOpen = () => {
     if(!sendMessage)
     {
@@ -442,7 +444,9 @@ export default function Monitor() {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const handleCloseHistorial = () => {
+    setOpenHistorial(false);
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -542,10 +546,17 @@ export default function Monitor() {
                     {data.name}
                 </MenuItem>
             );
+  let optionsHistorico = arrayHistorico.map((data) =>
+                <MenuItem 
+                    key={data.id}
+                    value={data.id}
+                >
+                    {data.name}
+                </MenuItem>
+            );
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const handleClickOpenCultivoDialog = () => {
-    console.log('funciona');
     setOpenDialog(true);
     selectCultivoOnClick();
   };
@@ -582,7 +593,7 @@ export default function Monitor() {
         <Grid container spacing={3}>
           <Grid item xs={3}>
             <ColorButton onClick={handleClickOpenCultivoDialog}>Nuevo Cultivo</ColorButton>
-            <ColorButton >Visualizar Histórico</ColorButton>
+            <ColorButton onClick={handleOpenHistorial} >Visualizar Histórico</ColorButton>
           </Grid>
           <Grid item xs={6}>
             
@@ -630,6 +641,41 @@ export default function Monitor() {
           </Grid>
         </Grid>
         <Dialog
+          open={openHistorial}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleCloseHistorial}
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle id="alert-dialog-slide-title">{"¿Quieres activar las notificaciones?"}</DialogTitle>
+          <DialogContent>
+            <Grid container spacing={3}>
+              <Grid item xs={3}>
+                <FormControl  className={classes.formControl}>
+                              <InputLabel id="Historico-select-helper-label">Historico</InputLabel>
+                              <Select
+                                  labelId="demo-simple-select-helper-label"
+                                  id="demo-simple-select-helper"
+                              >
+                                  <MenuItem value="">
+                                  <em>None</em>
+                                  </MenuItem>
+                                  {optionsHistorico}
+                              </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={9}></Grid>
+            
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={registrarCultivoOnClick} color="primary" justify="center">
+            Revisar
+          </Button>
+        </DialogActions>
+        </Dialog>
+        <Dialog
           open={open}
           TransitionComponent={Transition}
           keepMounted
@@ -655,27 +701,27 @@ export default function Monitor() {
         <Dialog open={openDialog} onClose={handleCloseCultivoDialog} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Crear Nuevo Cultivo</DialogTitle>
         <DialogContent>
-        <form className={classes.container}>
-        <TextField
-            autoFocus
-            margin="dense"
-            id="nombreCultivo"
-            label="Nombre del Cultivo"
-            type="text"
-            fullWidth
-          />
-             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="plantaInputLabel">Planta</InputLabel>
-              <Select
-                id="plantaSelect"
-                native
-                value={planta}
-                onChange={handleChangePlantaSelect}
-                input={<Input id="plantaInputLabel" />}>
-                  <option aria-label="None" value="" />
-              </Select>
-            </FormControl>
-          </form>
+          <form className={classes.container}>
+            <TextField
+                autoFocus
+                margin="dense"
+                id="nombreCultivo"
+                label="Nombre del Cultivo"
+                type="text"
+                fullWidth
+              />
+                <FormControl className={classes.formControl}>
+                  <InputLabel htmlFor="plantaInputLabel">Planta</InputLabel>
+                  <Select
+                    id="plantaSelect"
+                    native
+                    value={planta}
+                    onChange={handleChangePlantaSelect}
+                    input={<Input id="plantaInputLabel" />}>
+                      <option aria-label="None" value="" />
+                  </Select>
+                </FormControl>
+            </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={registrarCultivoOnClick} color="primary" justify="center">

@@ -10,6 +10,8 @@
     "chart.js": "^2.9.3",
     "chart.piecelabel.js": "^0.15.0",
     "classnames": "^2.2.6",
+    "emailjs-com": "^2.4.1",
+    "jquery": "^3.5.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
     "react-chartjs-2": "^2.9.0",
@@ -17,8 +19,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.1",
     "react-toastify": "^5.5.0",
-    "reactstrap": "^8.4.1",
-    "jquery": "^3.5.0"
+    "reactstrap": "^8.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

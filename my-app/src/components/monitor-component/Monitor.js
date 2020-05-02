@@ -29,10 +29,10 @@ import nosensor from '../../resources/sensornodisponible.png';
 import Input from "@material-ui/core/Input";
 import TextField from '@material-ui/core/TextField';
 import $ from 'jquery';
-import {BaseURL,cultivo} from "../BaseURL"
+import {BaseURL,cultivo,sensores} from "../BaseURL"
 import Mantenimiento from '../mantenimiento-component/Mantenimiento';
 import 'chart.piecelabel.js';
-
+import emailjs from 'emailjs-com';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -81,7 +81,47 @@ function PlantaSelectOptions(data){
     });
   }
 }
+function sendAlert(){
+  var dataMonitor = getMonitorData();
+    $.ajax({  
+      url: BaseURL+sensores,
+      method:"GET",
+      dataType:'JSON',
+      success: function(respuesta){
+        for(var element in respuesta.data){      
+          switch(respuesta.data[element].nombre) {
+            case 'humedad':
+              if(respuesta.data[element].recomendado_min>dataMonitor.humedad){
+                sendEmail("Nivel de humedad: "+dataMonitor.humedad+"  "+"El nivel recomendado es "+respuesta.data[element].recomendado_min)
+              } else if(respuesta.data[element].recomendado_max<dataMonitor.humedad){
+                sendEmail("Nivel de humedad: "+dataMonitor.humedad+"  "+"El nivel recomendado es "+respuesta.data[element].recomendado_max)
+              }
+              break;
+            case 'luminosidad':
+              if(respuesta.data[element].recomendado_min>dataMonitor.luminosidad){
+                sendEmail("Nivel de luminosidad: "+dataMonitor.luminosidad+"  "+"El nivel recomendado es "+respuesta.data[element].recomendado_min)
+              } else if(respuesta.data[element].recomendado_max<dataMonitor.luminosidad){
+                sendEmail("Nivel de luminosidad: "+dataMonitor.luminosidad+"  "+"El nivel recomendado es "+respuesta.data[element].recomendado_max)
+              }
+                break;
+          }
+        }
+      }
+   });
 
+}
+function sendEmail(mensaje){
+  var template_params = {
+    "to_email": "marting_ng_96@hotmail.com",
+    "to_name": "Martin",
+    "message_html": mensaje
+ }
+ 
+ var service_id = "Martin_Ng";
+ var template_id = "template_UTsu7Cwg";
+ var userId="user_91BgDbvnrfuHO08aKSE1e";
+ emailjs.send(service_id, template_id, template_params,userId);
+}
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
@@ -358,6 +398,7 @@ const optionsDoughnutEC = {
   },
   cutoutPercentage: 60
 }
+
 var updateMonitorData = function(){
   var dataMonitor = getMonitorData();
   
@@ -434,6 +475,7 @@ export default function Monitor() {
   };
   const handleAprobal = () => {
     setSendMessage(true);
+    sendAlert();
     setOpen(false);
   }
   const handleCancel = () => {
@@ -546,7 +588,6 @@ export default function Monitor() {
 
   const [openDialog, setOpenDialog] = React.useState(false);
   const handleClickOpenCultivoDialog = () => {
-    console.log('funciona');
     setOpenDialog(true);
     selectCultivoOnClick();
   };

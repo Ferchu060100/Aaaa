@@ -34,7 +34,7 @@ function GetSensores(){
               case 'humedad':
                   humedadMin.value=respuesta.data[element].recomendado_min;
                   humedadMax.value=respuesta.data[element].recomendado_max;
-                  //$("#HumedadMaximaSlider").prop('value',humedadMax);
+                  //document.getElementById("#HumedadMaximaSlider")$("#HumedadMaximaSlider").prop('value',humedadMax);
                 break;
               case 'luminosidad':
                   luminosidadMax.value=respuesta.data[element].recomendado_max;
@@ -89,6 +89,7 @@ const AntSwitch = withStyles((theme) => ({
 function valuetext(value) {
   return `${value}°C`;
 }
+
 export default function Mantenimiento() {
   $(document).ready(()=>{
     GetSensores();

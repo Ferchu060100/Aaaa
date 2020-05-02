@@ -7,6 +7,7 @@ import SignIn from './signin-component/IniciarSesion'
 import Mantenimiento from './mantenimiento-component/Mantenimiento'
 import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
+import Historico  from './monitor-component/Historico';
 
 
 function lineOptions(labels = []) {
@@ -137,10 +138,14 @@ function data_temperatura(datasrc=[]) {
 function App() {
   return (
   <div className="App">
-            <Router>
-              <Route exact path="/registrar" component={SignUp}/>
-              <Route exact path="/monitor" component={Monitor}/>
-              <Route exact path="/" component={SignIn}/>
+      <Router>
+            <Route path="/inicio" component={Graficos}/>
+              <Route path="/registrar" component={SignUp}/>
+              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
+              <Route path="/iniciarsesion" component={SignIn}/>
+              <Route path="/mantenimiento" component={Mantenimiento}/>
+              <Route path="/monitoreo" component={Monitor}/>
+              <Route path="/historico" component={Historico}/>
       </Router>
       <ToastContainer />
   </div>

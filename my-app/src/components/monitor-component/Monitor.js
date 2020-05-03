@@ -88,7 +88,8 @@ function sendAlert(){
       method:"GET",
       dataType:'JSON',
       success: function(respuesta){
-        for(var element in respuesta.data){      
+        console.log(respuesta);  
+        for(var element in respuesta.data){  
           switch(respuesta.data[element].nombre) {
             case 'humedad':
               if(respuesta.data[element].recomendado_min>dataMonitor.humedad){

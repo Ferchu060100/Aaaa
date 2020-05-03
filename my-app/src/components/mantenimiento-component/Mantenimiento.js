@@ -24,22 +24,34 @@ function GetSensores(){
       var ecMax=document.getElementById('ECMaxima');
       var tempMin=document.getElementById('temperaturaMinima');
       var tempMax=document.getElementById('temperaturaMaxima');
+      var tempMinSlider=document.getElementById('temperaturaMinimaSlider');
       $.ajax({  
         url: BaseURL+sensores,
         method:"GET",
         dataType:'JSON',
         success: function(respuesta){
-          for(var element in respuesta.data){      
+          for(var element in respuesta.data){   
             switch(respuesta.data[element].nombre) {
               case 'humedad':
-                  humedadMin.value=respuesta.data[element].recomendado_min;
-                  humedadMax.value=respuesta.data[element].recomendado_max;
-                  //document.getElementById("#HumedadMaximaSlider")$("#HumedadMaximaSlider").prop('value',humedadMax);
+                  humedadMin.value=respuesta.data[element].valor_min;
+                  humedadMax.value=respuesta.data[element].valor_max;
                 break;
               case 'luminosidad':
-                  luminosidadMax.value=respuesta.data[element].recomendado_max;
-                  luminosidadMin.value=respuesta.data[element].recomendado_min;
+                  luminosidadMax.value=respuesta.data[element].valor_max;
+                  luminosidadMin.value=respuesta.data[element].valor_min;
                   break;
+              case 'temperatura':
+                tempMin.value=respuesta.data[element].valor_min;
+                tempMax.value=respuesta.data[element].valor_max;
+                //console.log(tempMinSlider.childNodes[2].value);
+                break;
+              case 'ph':
+                phMin.value=respuesta.data[element].valor_min;
+                phMax.value=respuesta.data[element].valor_max;
+                break;
+              case "conductividad":
+                ecMin.value=respuesta.data[element].valor_min;
+                ecMax.value=respuesta.data[element].valor_max;
             }
           }
         }
@@ -90,7 +102,8 @@ function valuetext(value) {
   return `${value}°C`;
 }
 
-export default function Mantenimiento() {
+const Mantenimiento=React.memo(function() {
+  
   $(document).ready(()=>{
     GetSensores();
   })
@@ -127,6 +140,7 @@ export default function Mantenimiento() {
           Mínima
         </Typography>
         <Slider
+          id="temperaturaMinimaSlider"
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -522,3 +536,5 @@ export default function Mantenimiento() {
     </Container>
   );
 }
+);
+export default Mantenimiento;

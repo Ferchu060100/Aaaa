@@ -47,7 +47,7 @@ function IniciarSesionOnClick(){
     }
  });
 }
-export default function SignIn() {
+const SignIn= React.memo(function() {
   const classes = useStyles();
 
   return (
@@ -101,3 +101,5 @@ export default function SignIn() {
     </Container>
   );
 }
+);
+export default SignIn;

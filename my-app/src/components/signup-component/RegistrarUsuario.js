@@ -53,7 +53,7 @@ function PostUsuario(){
     }
  });
 }
-export default function SignUp() {
+const SignUp=React.memo(function() {
   const classes = useStyles();
   return (
     <Container component="main" maxWidth="xs">
@@ -137,4 +137,5 @@ export default function SignUp() {
       </div>
     </Container>
   );
-}
+});
+export default SignUp;

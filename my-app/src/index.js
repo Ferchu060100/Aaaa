@@ -4,7 +4,7 @@ import AWS from "aws-sdk";
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './components/serviceWorker';
-import { BaseURL } from './BaseURL';
+import { BaseURL } from './components/BaseURL';
 
 AWS.config.update({
     accessKeyId: 'AKIAVQLA7TQ5KQHYBOE2' ,

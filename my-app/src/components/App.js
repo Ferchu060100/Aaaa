@@ -8,7 +8,7 @@ import Mantenimiento from './mantenimiento-component/Mantenimiento'
 import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
 import Historico  from './monitor-component/Historico';
-
+import Example  from './prueba-component/Prueba';
 
 function lineOptions(labels = []) {
   return{
@@ -141,11 +141,11 @@ function App() {
       <Router>
             <Route path="/inicio" component={Graficos}/>
               <Route path="/registrar" component={SignUp}/>
-              <Route path="/registrarcultivo" component={RegistrarCultivo}/>
               <Route path="/iniciarsesion" component={SignIn}/>
               <Route path="/mantenimiento" component={Mantenimiento}/>
               <Route path="/monitoreo" component={Monitor}/>
               <Route path="/historico" component={Historico}/>
+              <Route path="/prueba" component={Example}/>
       </Router>
       <ToastContainer />
   </div>

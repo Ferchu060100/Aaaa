@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Slider from '@material-ui/core/Slider';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box'
 import {BaseURL,sensores} from '../BaseURL'
 import $ from 'jquery';
@@ -24,7 +25,7 @@ function GetSensores(){
       var ecMax=document.getElementById('ECMaxima');
       var tempMin=document.getElementById('temperaturaMinima');
       var tempMax=document.getElementById('temperaturaMaxima');
-      var tempMinSlider=document.getElementById('temperaturaMinimaSlider');
+      //var tempMinSlider=document.getElementById('temperaturaMinimaSlider');
       $.ajax({  
         url: BaseURL+sensores,
         method:"GET",
@@ -57,9 +58,65 @@ function GetSensores(){
         }
      });
     }
-
 }
-
+function getJsonValues(){
+  var humedadMin=document.getElementById('humedadMinima');
+  var humedadMax=document.getElementById('humedadMaxima');
+  var luminosidadMin=document.getElementById('LuminosidadMinima');
+  var luminosidadMax=document.getElementById('LuminosidadMaxima');
+  var phMin=document.getElementById('PhMinima');
+  var phMax=document.getElementById('PhMaxima');
+  var ecMin=document.getElementById('ECMinima');
+  var ecMax=document.getElementById('ECMaxima');
+  var tempMin=document.getElementById('temperaturaMinima');
+  var tempMax=document.getElementById('temperaturaMaxima');
+  var jsonArray=[]
+  var jsonHumedad={
+        "nombre":"humedad",
+        "valor_min":humedadMin.value,
+        "valor_max":humedadMax.value
+  }
+  var jsonLuminosidad={
+    "nombre":"luminosidad",
+    "valor_min":luminosidadMin.value,
+    "valor_max":luminosidadMax.value
+  }
+  var jsonPh={
+    "nombre":"ph",
+        "valor_min":phMin.value,
+        "valor_max":phMax.value
+  }
+  var jsonTemperatura={
+    "nombre":"temperatura",
+        "valor_min":tempMin.value,
+        "valor_max":tempMax.value
+  }
+  var jsonEc={
+    "nombre":"conductividad",
+        "valor_min":ecMin.value,
+        "valor_max":ecMin.value
+  }
+  jsonArray.push(jsonEc);
+  jsonArray.push(jsonHumedad);
+  jsonArray.push(jsonLuminosidad);
+  jsonArray.push(jsonTemperatura);
+  jsonArray.push(jsonPh);
+  return jsonArray;
+}
+function PostSensores(){
+  var jsonArray=getJsonValues();
+  for (var idx in jsonArray){
+    $.ajax({  
+      url: BaseURL+sensores,
+      method:"POST",
+      dataType:'JSON',
+      data:JSON.stringify(jsonArray[idx]),
+      success: function(respuesta){
+          console.log(respuesta);
+      }
+   });
+  }
+}
 const useStyles = makeStyles({
   root: {
     height: 300,
@@ -532,6 +589,15 @@ const Mantenimiento=React.memo(function() {
       </Typography>
         </div>
 </Grid>
+<Grid
+  container
+  direction="row"
+  justify="flex-end"
+>
+<Button variant="contained" color="primary" onClick={PostSensores}>
+      Guardar
+    </Button>
+  </Grid>
 </Grid>
     </Container>
   );

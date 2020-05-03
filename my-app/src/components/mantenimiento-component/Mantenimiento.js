@@ -101,11 +101,11 @@ function getJsonValues(){
         "recomendado_min":0,
         "recomendado_max":50
   }
-  jsonArray.push(jsonEc);
   jsonArray.push(jsonHumedad);
   jsonArray.push(jsonLuminosidad);
-  jsonArray.push(jsonTemperatura);
   jsonArray.push(jsonPh);
+  jsonArray.push(jsonTemperatura);
+  jsonArray.push(jsonEc);
   return jsonArray;
 }
 function PostSensores(){

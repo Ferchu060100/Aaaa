@@ -72,29 +72,34 @@ function getJsonValues(){
   var tempMax=document.getElementById('temperaturaMaxima');
   var jsonArray=[]
   var jsonHumedad={
-        "nombre":"humedad",
         "valor_min":humedadMin.value,
-        "valor_max":humedadMax.value
+        "valor_max":humedadMax.value,
+        "recomendado_min":0,
+        "recomendado_max":99,
   }
   var jsonLuminosidad={
-    "nombre":"luminosidad",
     "valor_min":luminosidadMin.value,
-    "valor_max":luminosidadMax.value
+    "valor_max":luminosidadMax.value,
+    "recomendado_min":0,
+    "recomendado_max":100,
   }
   var jsonPh={
-    "nombre":"ph",
         "valor_min":phMin.value,
-        "valor_max":phMax.value
+        "valor_max":phMax.value,
+        "recomendado_min":1,
+        "recomendado_max":10
   }
   var jsonTemperatura={
-    "nombre":"temperatura",
         "valor_min":tempMin.value,
-        "valor_max":tempMax.value
+        "valor_max":tempMax.value,
+        "recomendado_min":10,
+        "recomendado_max":40
   }
   var jsonEc={
-    "nombre":"conductividad",
         "valor_min":ecMin.value,
-        "valor_max":ecMin.value
+        "valor_max":ecMax.value,
+        "recomendado_min":0,
+        "recomendado_max":50
   }
   jsonArray.push(jsonEc);
   jsonArray.push(jsonHumedad);
@@ -104,11 +109,12 @@ function getJsonValues(){
   return jsonArray;
 }
 function PostSensores(){
+  var idArray=["1humedad","1luminosidad","1ph","1temperatura","1conductividad"];
   var jsonArray=getJsonValues();
   for (var idx in jsonArray){
     $.ajax({  
-      url: BaseURL+sensores,
-      method:"POST",
+      url: BaseURL+sensores+"/"+idArray[idx],
+      method:"PUT",
       dataType:'JSON',
       data:JSON.stringify(jsonArray[idx]),
       success: function(respuesta){

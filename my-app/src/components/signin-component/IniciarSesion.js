@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {BaseURL,signIn} from "../BaseURL";
+import Auth from '../authentication-component/Authentication';
 import $ from "jquery"
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-function IniciarSesionOnClick(){
+function IniciarSesionOnClick(props){
   var username=document.getElementById('email').value;
   var password=document.getElementById('password').value;
   var datos={
@@ -42,12 +43,15 @@ function IniciarSesionOnClick(){
     data: datos,
     dataType:'JSON',
     success: function(respuesta){
-      if(respuesta.result=="ok")
-        window.location.href='monitor'
+      if(respuesta.result=="ok"){
+        Auth.login(()=>{
+          props.history.push('/monitoreo');
+        });
+      }
     }
  });
 }
-const SignIn= React.memo(function() {
+const SignIn= React.memo(function(props) {
   const classes = useStyles();
 
   return (
@@ -84,14 +88,14 @@ const SignIn= React.memo(function() {
             fullWidth
             variant="contained"
             color="primary"
-            onClick={IniciarSesionOnClick}
+            onClick={()=>IniciarSesionOnClick(props)}
             className={classes.submit}
           >
             Iniciar Sesión
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Link href="registrar" variant="body2">
+              <Link href="SignUp" variant="body2">
                 {"¿Aun no tienes una cuenta? Registrate"}
               </Link>
             </Grid>

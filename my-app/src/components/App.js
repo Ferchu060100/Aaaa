@@ -9,7 +9,7 @@ import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
 import Historico  from './monitor-component/Historico';
 import Example  from './prueba-component/Prueba';
-
+import ProtectedRoute from './authentication-component/ProtectedRoute';
 function lineOptions(labels = []) {
   return{
   responsive: true,
@@ -139,13 +139,13 @@ function App() {
   return (
   <div className="App">
       <Router>
-            <Route path="/inicio" component={Graficos}/>
-              <Route path="/registrar" component={SignUp}/>
-              <Route path="/iniciarsesion" component={SignIn}/>
-              <Route path="/mantenimiento" component={Mantenimiento}/>
-              <Route path="/monitoreo" component={Monitor}/>
-              <Route path="/historico" component={Historico}/>
-              <Route path="/prueba" component={Example}/>
+            <ProtectedRoute path="/inicio" component={Graficos}/>
+              <Route path="/SignUp" component={SignUp}/>
+              <Route path="/SignIn" component={SignIn}/>
+              <ProtectedRoute path="/mantenimiento" component={Mantenimiento}/>
+              <ProtectedRoute path="/monitoreo" component={Monitor}/>
+              <ProtectedRoute path="/historico" component={Historico}/>
+              <ProtectedRoute path="/prueba" component={Example}/>
       </Router>
       <ToastContainer />
   </div>

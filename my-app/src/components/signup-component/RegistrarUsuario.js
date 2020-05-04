@@ -49,7 +49,7 @@ function PostUsuario(){
     dataType:'JSON',
     success: function(respuesta){
       if(respuesta.result=="ok")
-        window.location.href='/'
+        window.location.href='/SignIn'
     }
  });
 }

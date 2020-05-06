@@ -8,6 +8,7 @@ import {  getSelectSensorData, getCultivoAnteriorDataBySensorId, getCultivoActua
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import {Line} from 'react-chartjs-2';
 import nosensor from '../../resources/sensornodisponible.png';
+import { Link } from 'react-router-dom';
 const ColorButton = withStyles((theme) => ({
     root: {
       margin: "10px",
@@ -156,7 +157,10 @@ export default function Historial(props){
         </Grid>
         <Grid item xs={3} className={classes.footerGridMonitor}>
             
+        <Link to= "/monitoreo">
         <ColorButton >Volver</ColorButton>
+        </Link>
+        
         </Grid>
     </Grid>
     </div>

@@ -29,31 +29,43 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-function IniciarSesionOnClick(props){
-  var username=document.getElementById('email').value;
-  var password=document.getElementById('password').value;
-  var datos={
-    "username": username,
-    "password": password
-  }
-  datos=JSON.stringify(datos);
-  $.ajax({
-    url: BaseURL+signIn,
-    method:"POST",
-    data: datos,
-    dataType:'JSON',
-    success: function(respuesta){
-      if(respuesta.result=="ok"){
-        Auth.login(()=>{
-          props.history.push('/monitoreo');
-        });
-      }
-    }
- });
-}
 const SignIn= React.memo(function(props) {
   const classes = useStyles();
-
+  const [showError,setShowError]=React.useState(false);
+  const [username,setUsername]=React.useState();
+  const [password,setPassword]=React.useState();
+  const handleUsername=event=>{
+    setUsername(event.target.value);
+  }
+  const handlePassword=event=>{
+    setPassword(event.target.value);
+  }
+  const handleLogin=()=>{
+    var datos={
+      "username": username,
+      "password": password
+    }
+    datos=JSON.stringify(datos);
+    $.ajax({
+      url: BaseURL+signIn,
+      method:"POST",
+      data: datos,
+      dataType:'JSON',
+      success: function(respuesta){
+        if(respuesta.result=="ok"){
+          setShowError(false);
+          Auth.login(()=>{
+            props.history.push('/monitoreo');
+          });
+        }
+      },
+      error: function(err){
+        setShowError(true);
+        setUsername('');
+        setPassword('');
+      }
+   });
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -63,6 +75,8 @@ const SignIn= React.memo(function(props) {
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
+            value={username}
+            onChange={handleUsername}
             variant="outlined"
             margin="normal"
             required
@@ -74,6 +88,8 @@ const SignIn= React.memo(function(props) {
             autoFocus
           />
           <TextField
+          value={password}
+          onChange={handlePassword}
             variant="outlined"
             margin="normal"
             required
@@ -84,11 +100,18 @@ const SignIn= React.memo(function(props) {
             id="password"
             autoComplete="current-password"
           />
+          <Grid Container justify="center">
+            {
+              showError ? <Typography color="error" component="h1" variant="subtitle2">
+              Usuario o contraseña incorrecta 
+            </Typography> : null
+            }
+          </Grid>
           <Button
             fullWidth
             variant="contained"
             color="primary"
-            onClick={()=>IniciarSesionOnClick(props)}
+            onClick={handleLogin}
             className={classes.submit}
           >
             Iniciar Sesión

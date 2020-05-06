@@ -30,31 +30,48 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-function PostUsuario(){
-  var name=document.getElementById('firstName').value;
-  var familyName=document.getElementById('lastName').value;
-  var username=document.getElementById('email').value;
-  var password=document.getElementById('password').value;
-  var datos={
-    "name": name,
-    "family_name": familyName,
-    "username": username,
-    "password": password
-  }
-  datos=JSON.stringify(datos);
-  $.ajax({
-    url: BaseURL+signUp,
-    method:"POST",
-    data: datos,
-    dataType:'JSON',
-    success: function(respuesta){
-      if(respuesta.result=="ok")
-        window.location.href='/SignIn'
-    }
- });
-}
+
 const SignUp=React.memo(function() {
   const classes = useStyles();
+  const [firstName,setFirstName]=React.useState();
+  const [lastName,setLastName]=React.useState();
+  const [email,setEmail]=React.useState();
+  const [password,setPassword]=React.useState();
+  const [select,setSelect]=React.useState();
+  const handleFirstName=(event)=>{
+    setFirstName(event.target.value);
+  }
+  const handleLastName=(event)=>{
+    setLastName(event.target.value);
+  }
+  const handleEmail=(event)=>{
+    setEmail(event.target.value);
+  }
+  const handlePassword=(event)=>{
+    setPassword(event.target.value);
+  }
+  const handleSelect=(event)=>{
+    setSelect(event.target.check);
+  }
+  const PostUsuario=()=>{
+    var datos={
+      "name": firstName,
+      "family_name": lastName,
+      "username": email,
+      "password": password
+    }
+    datos=JSON.stringify(datos);
+    $.ajax({
+      url: BaseURL+signUp,
+      method:"POST",
+      data: datos,
+      dataType:'JSON',
+      success: function(respuesta){
+        if(respuesta.result=="ok")
+          window.location.href='/SignIn'
+      }
+   });
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -66,6 +83,8 @@ const SignUp=React.memo(function() {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
+              onChange={handleFirstName}
+              value={firstName}
                 autoComplete="fname"
                 name="firstName"
                 variant="outlined"
@@ -78,6 +97,8 @@ const SignUp=React.memo(function() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+              onChange={handleLastName}
+              value={lastName}
                 variant="outlined"
                 required
                 fullWidth
@@ -89,6 +110,8 @@ const SignUp=React.memo(function() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+              onChange={handleEmail}
+              value={email}
                 variant="outlined"
                 required
                 fullWidth
@@ -100,6 +123,8 @@ const SignUp=React.memo(function() {
             </Grid>
             <Grid item xs={12}>
               <TextField
+              onChange={handlePassword}
+              value={password }
                 variant="outlined"
                 required
                 fullWidth
@@ -112,7 +137,7 @@ const SignUp=React.memo(function() {
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
+                control={<Checkbox checked={select} onChange={handleSelect} value="allowExtraEmails" color="primary" />}
                 label="Acepto los terminos de uso y las politicas de privacidad"
               />
             </Grid>
@@ -128,7 +153,7 @@ const SignUp=React.memo(function() {
           </Button>
           <Grid container justify="center">
             <Grid item>
-              <Link href="iniciarsesion" variant="body2">
+              <Link href="SignIn" variant="body2">
                ¿Ya tienes una cuenta?. Inicia Sesión
               </Link>
             </Grid>

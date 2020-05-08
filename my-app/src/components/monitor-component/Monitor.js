@@ -412,7 +412,7 @@ var updateMonitorData = function(){
 
 setInterval(updateMonitorData,2000);
 
-export default function Monitor() {
+export default function Monitor(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -429,6 +429,7 @@ export default function Monitor() {
   const [dataReporte,setDataReporte] =  React.useState([65, 59, 80, 81, 56, 55, 40,50,54,10]);
   const [selectedSensor,setSelectedSensor] =  React.useState('');
   const [isLineReportShown,setIsLineReportShown] =  React.useState(false);
+  const [sensorData,setsensorData] =  React.useState([]);
   const dataReportShown = {
     labels: ['Muestra 1', 'Muestra 2', 'Muestra 3', 'Muestra 4', 'Muestra 5', 'Muestra 6', 'Muestra 7', 'Muestra 8', 'Muestra 9', 'Muestra 10'],
     datasets: [
@@ -598,6 +599,7 @@ export default function Monitor() {
             );
 
   const [openDialog, setOpenDialog] = React.useState(false);
+  const [selectedHistorial, setSelectedHistorial] = React.useState("");
   const handleClickOpenCultivoDialog = () => {
     setOpenDialog(true);
     selectCultivoOnClick();
@@ -618,6 +620,22 @@ export default function Monitor() {
     }
     PostCultivo(JSON.stringify(datos));
   };
+  const handleChangeSelection = (event) =>{
+    if(event.target.value === 1){
+      setSelectedHistorial("actual");
+    }
+    else{
+      setSelectedHistorial("anterior");
+    }
+    
+    
+  }
+  const handleRevisarCultivo = (event) =>{
+    if(selectedHistorial!==""){
+      props.history.push("historial/"+selectedHistorial)
+    }
+  }
+  
   return (
     
     <Box className={classes.root}>
@@ -699,6 +717,7 @@ export default function Monitor() {
                               <Select
                                   labelId="demo-simple-select-helper-label"
                                   id="demo-simple-select-helper"
+                                  onChange={handleChangeSelection}
                               >
                                   <MenuItem value="">
                                   <em>None</em>
@@ -712,7 +731,7 @@ export default function Monitor() {
             </Grid>
           </DialogContent>
           <DialogActions>
-          <Button onClick={registrarCultivoOnClick} color="primary" justify="center">
+          <Button onClick={handleRevisarCultivo} color="primary" justify="center">
             Revisar
           </Button>
         </DialogActions>
@@ -802,7 +821,7 @@ export default function Monitor() {
           <Grid item xs={9}>
           </Grid>
           <Grid item xs={3} className={classes.footerGridMonitor}>
-            <ColorButton >Comprar Cultivos</ColorButton>
+            <ColorButton >Comparar Cultivos</ColorButton>
           </Grid>
         </Grid>
       </TabPanel>

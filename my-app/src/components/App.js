@@ -1,13 +1,14 @@
 import React  from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
-import {BrowserRouter as Router,Route} from 'react-router-dom';
+import {BrowserRouter as Router,Route, Switch} from 'react-router-dom';
 import SignUp from './signup-component/RegistrarUsuario'
 import SignIn from './signin-component/IniciarSesion'
 import Mantenimiento from './mantenimiento-component/Mantenimiento'
 import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
-import Historico  from './monitor-component/Historico';
+import Reporte  from './monitor-component/Reporte';
+import Historial  from './monitor-component/Historial';
 import Example  from './prueba-component/Prueba';
 import ProtectedRoute from './authentication-component/ProtectedRoute';
 function lineOptions(labels = []) {
@@ -144,9 +145,14 @@ function App() {
               <Route path="/SignIn" component={SignIn}/>
               <ProtectedRoute path="/mantenimiento" component={Mantenimiento}/>
               <ProtectedRoute path="/monitoreo" component={Monitor}/>
-              <ProtectedRoute path="/historico" component={Historico}/>
+              <ProtectedRoute path="/reporte" component={Reporte}/>
               <ProtectedRoute path="/prueba" component={Example}/>
+              <Switch>
+                  <Route path="/historial/:tipohistorial" component={Historial}></Route>
+              </Switch>
       </Router>
+
+      
       <ToastContainer />
   </div>
 );

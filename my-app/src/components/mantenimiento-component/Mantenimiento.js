@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box'
 import {BaseURL,sensores} from '../BaseURL'
 import $ from 'jquery';
-
+/*
 function GetSensores(){
     var humedadMin=document.getElementById('humedadMinima');
     var humedadMax=document.getElementById('humedadMaxima');
@@ -44,6 +44,7 @@ function GetSensores(){
               case 'temperatura':
                 tempMin.value=respuesta.data[element].valor_min;
                 tempMax.value=respuesta.data[element].valor_max;
+                //tempMinSlider.value=20;
                 //console.log(tempMinSlider.childNodes[2].value);
                 break;
               case 'ph':
@@ -58,7 +59,7 @@ function GetSensores(){
         }
      });
     }
-}
+}*/
 function getJsonValues(){
   var humedadMin=document.getElementById('humedadMinima');
   var humedadMax=document.getElementById('humedadMaxima');
@@ -166,7 +167,50 @@ function valuetext(value) {
 }
 
 const Mantenimiento=React.memo(function() {
-  
+  const [humedadMin,setHumedadMin]=React.useState();
+  const  [humedadMax,setHumedadMax]=React.useState();
+  const [luminosidadMin,setLuminosidadMin]=React.useState();
+  const [luminosidadMax,setLuminosidadMax]=React.useState();
+  const [phMin,setPhMin]=React.useState();
+  const [phMax,setPhMax]=React.useState();
+  const [ecMin,setEcMin]=React.useState();
+  const [ecMax,setEcMax]=React.useState();
+  const [tempMin,setTempMin]=React.useState();
+  const [tempMax,setTempMax]=React.useState();
+  const GetSensores=()=>{
+    $.ajax({  
+      url: BaseURL+sensores,
+      method:"GET",
+      dataType:'JSON',
+      success: function(respuesta){
+        for(var element in respuesta.data){   
+          switch(respuesta.data[element].nombre) {
+            case 'humedad':
+              setHumedadMin(respuesta.data[element].valor_min);
+              setHumedadMax(respuesta.data[element].valor_max);
+              break;
+            case 'luminosidad':
+              setLuminosidadMax(respuesta.data[element].valor_max);
+              setLuminosidadMin(respuesta.data[element].valor_min);
+                break;
+            case 'temperatura':
+              setTempMin(respuesta.data[element].valor_min);
+              setTempMax(respuesta.data[element].valor_max);
+              //tempMinSlider.value=20;
+              //console.log(tempMinSlider.childNodes[2].value);
+              break;
+            case 'ph':
+              setPhMin(respuesta.data[element].valor_min);
+              setPhMax(respuesta.data[element].valor_max);
+              break;
+            case "conductividad":
+              setEcMin(respuesta.data[element].valor_min);
+              setEcMax(respuesta.data[element].valor_max);
+          }
+        }
+      }
+   });
+  }
   $(document).ready(()=>{
     GetSensores();
   })
@@ -204,6 +248,7 @@ const Mantenimiento=React.memo(function() {
         </Typography>
         <Slider
           id="temperaturaMinimaSlider"
+          value={tempMin}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -216,6 +261,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={tempMin}
           id="temperaturaMinima"
           label="Valor"
           type="number"
@@ -244,6 +290,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
         <TextField
+        value={tempMax}
           id="temperaturaMaxima"
           label="Valor"
           type="number"
@@ -298,6 +345,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={humedadMin}
           id="humedadMinima"
           label="Valor"
           type="number"
@@ -326,6 +374,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={humedadMax}
           id="humedadMaxima"
           label="Valor"
           type="number"
@@ -379,6 +428,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={phMin}
           id="PhMinima"
           label="Valor"
           type="number"
@@ -406,6 +456,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={phMax}
           id="PhMaxima"
           label="Valor"
           type="number"
@@ -459,6 +510,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={ecMin}
           id="ECMinima"
           label="Valor"
           type="number"
@@ -486,6 +538,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={ecMax}
           id="ECMaxima"
           label="Valor"
           type="number"
@@ -540,6 +593,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={luminosidadMin}
           id="LuminosidadMinima"
           label="Valor"
           type="number"
@@ -567,6 +621,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
                 <TextField
+                value={luminosidadMax}
           id="LuminosidadMaxima"
           label="Valor"
           type="number"

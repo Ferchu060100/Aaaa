@@ -11,55 +11,6 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box'
 import {BaseURL,sensores} from '../BaseURL'
 import $ from 'jquery';
-/*
-function GetSensores(){
-    var humedadMin=document.getElementById('humedadMinima');
-    var humedadMax=document.getElementById('humedadMaxima');
-    var luminosidadMin=document.getElementById('LuminosidadMinima');
-    var luminosidadMax=document.getElementById('LuminosidadMaxima');
-    if(humedadMin.value=='' && luminosidadMin.value=='')
-    {
-      var phMin=document.getElementById('PhMinima');
-      var phMax=document.getElementById('PhMaxima');
-      var ecMin=document.getElementById('ECMinima');
-      var ecMax=document.getElementById('ECMaxima');
-      var tempMin=document.getElementById('temperaturaMinima');
-      var tempMax=document.getElementById('temperaturaMaxima');
-      //var tempMinSlider=document.getElementById('temperaturaMinimaSlider');
-      $.ajax({  
-        url: BaseURL+sensores,
-        method:"GET",
-        dataType:'JSON',
-        success: function(respuesta){
-          for(var element in respuesta.data){   
-            switch(respuesta.data[element].nombre) {
-              case 'humedad':
-                  humedadMin.value=respuesta.data[element].valor_min;
-                  humedadMax.value=respuesta.data[element].valor_max;
-                break;
-              case 'luminosidad':
-                  luminosidadMax.value=respuesta.data[element].valor_max;
-                  luminosidadMin.value=respuesta.data[element].valor_min;
-                  break;
-              case 'temperatura':
-                tempMin.value=respuesta.data[element].valor_min;
-                tempMax.value=respuesta.data[element].valor_max;
-                //tempMinSlider.value=20;
-                //console.log(tempMinSlider.childNodes[2].value);
-                break;
-              case 'ph':
-                phMin.value=respuesta.data[element].valor_min;
-                phMax.value=respuesta.data[element].valor_max;
-                break;
-              case "conductividad":
-                ecMin.value=respuesta.data[element].valor_min;
-                ecMax.value=respuesta.data[element].valor_max;
-            }
-          }
-        }
-     });
-    }
-}*/
 function getJsonValues(){
   var humedadMin=document.getElementById('humedadMinima');
   var humedadMax=document.getElementById('humedadMaxima');
@@ -119,7 +70,6 @@ function PostSensores(){
       dataType:'JSON',
       data:JSON.stringify(jsonArray[idx]),
       success: function(respuesta){
-          console.log(respuesta);
       }
    });
   }
@@ -167,53 +117,86 @@ function valuetext(value) {
 }
 
 const Mantenimiento=React.memo(function() {
-  const [humedadMin,setHumedadMin]=React.useState();
-  const  [humedadMax,setHumedadMax]=React.useState();
-  const [luminosidadMin,setLuminosidadMin]=React.useState();
-  const [luminosidadMax,setLuminosidadMax]=React.useState();
-  const [phMin,setPhMin]=React.useState();
-  const [phMax,setPhMax]=React.useState();
-  const [ecMin,setEcMin]=React.useState();
-  const [ecMax,setEcMax]=React.useState();
-  const [tempMin,setTempMin]=React.useState();
-  const [tempMax,setTempMax]=React.useState();
+  const [humedadMin,setHumedadMin]=React.useState('');
+  const  [humedadMax,setHumedadMax]=React.useState('');
+  const [luminosidadMin,setLuminosidadMin]=React.useState('');
+  const [luminosidadMax,setLuminosidadMax]=React.useState('');
+  const [phMin,setPhMin]=React.useState('');
+  const [phMax,setPhMax]=React.useState('');
+  const [ecMin,setEcMin]=React.useState('');
+  const [ecMax,setEcMax]=React.useState('');
+  const [tempMin,setTempMin]=React.useState('');
+  const [tempMax,setTempMax]=React.useState('');
+  const onHandleTempMin=(event,value)=>{
+    setTempMin(value);
+  }
+  const onHandleTempMax=(event,value)=>{
+    setTempMax(value);
+  }
+  const onHandleHumedadMin=(event,value)=>{
+      setHumedadMin(value);
+  }
+  const onHandleHumedadMax=(event,value)=>{
+    setHumedadMax(value);
+  }
+  const onHandleLuminosidadMin=(event,value)=>{
+    setLuminosidadMin(value);
+  }
+  const onHandleLuminosidadMax=(event,value)=>{
+    setLuminosidadMax(value);
+  }
+  const onHandleEcMin=(event,value)=>{
+    setEcMin(value);
+  }
+  const onHandleEcMax=(event,value)=>{
+    setEcMax(value);
+  }
+  const onHandlePhMin=(event,value)=>{
+    setPhMin(value);
+  }
+  const onHandlePhMax=(event,value)=>{
+    setPhMax(value);
+  }
   const GetSensores=()=>{
-    $.ajax({  
-      url: BaseURL+sensores,
-      method:"GET",
-      dataType:'JSON',
-      success: function(respuesta){
-        for(var element in respuesta.data){   
-          switch(respuesta.data[element].nombre) {
-            case 'humedad':
-              setHumedadMin(respuesta.data[element].valor_min);
-              setHumedadMax(respuesta.data[element].valor_max);
-              break;
-            case 'luminosidad':
-              setLuminosidadMax(respuesta.data[element].valor_max);
-              setLuminosidadMin(respuesta.data[element].valor_min);
+    if(humedadMax==''&&luminosidadMax==''&&tempMax==''&&phMax==''&&ecMax==''){
+      $.ajax({  
+        url: BaseURL+sensores,
+        method:"GET",
+        dataType:'JSON',
+        success: function(respuesta){
+          console.log(respuesta);
+          for(var element in respuesta.data){   
+            switch(respuesta.data[element].nombre) {
+              case 'humedad':
+                  setHumedadMin(respuesta.data[element].valor_min);
+                  setHumedadMax(respuesta.data[element].valor_max);
                 break;
-            case 'temperatura':
-              setTempMin(respuesta.data[element].valor_min);
-              setTempMax(respuesta.data[element].valor_max);
-              //tempMinSlider.value=20;
-              //console.log(tempMinSlider.childNodes[2].value);
-              break;
-            case 'ph':
-              setPhMin(respuesta.data[element].valor_min);
-              setPhMax(respuesta.data[element].valor_max);
-              break;
-            case "conductividad":
-              setEcMin(respuesta.data[element].valor_min);
-              setEcMax(respuesta.data[element].valor_max);
+              case 'luminosidad':
+                  setLuminosidadMax(respuesta.data[element].valor_max);
+                  setLuminosidadMin(respuesta.data[element].valor_min);
+                  break;
+              case 'temperatura':
+                  setTempMin(respuesta.data[element].valor_min);
+                  setTempMax(respuesta.data[element].valor_max);
+                break;
+              case 'ph':
+                  setPhMin(respuesta.data[element].valor_min);
+                  setPhMax(respuesta.data[element].valor_max);
+                break;
+              case "conductividad":
+                  setEcMin(respuesta.data[element].valor_min);
+                  setEcMax(respuesta.data[element].valor_max);
+            }
           }
         }
-      }
-   });
+     });
+    }
   }
   $(document).ready(()=>{
     GetSensores();
   })
+
+
   const classes = useStyles();
   const [state, setState] = React.useState({
     checkedTemperatura: true,
@@ -248,7 +231,9 @@ const Mantenimiento=React.memo(function() {
         </Typography>
         <Slider
           id="temperaturaMinimaSlider"
+          defaultValue={0}
           value={tempMin}
+          onChange={onHandleTempMin}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -262,6 +247,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={tempMin}
+                onChange={onHandleTempMin}
           id="temperaturaMinima"
           label="Valor"
           type="number"
@@ -278,6 +264,10 @@ const Mantenimiento=React.memo(function() {
           Máxima
         </Typography>
         <Slider
+        id="temperaturaMaxSlider"
+        defaultValue={0}
+        value={tempMax}
+        onChange={onHandleTempMax}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -290,6 +280,7 @@ const Mantenimiento=React.memo(function() {
         css={{ maxWidth: 70 }}
       >
         <TextField
+        onChange={onHandleTempMax}
         value={tempMax}
           id="temperaturaMaxima"
           label="Valor"
@@ -333,6 +324,9 @@ const Mantenimiento=React.memo(function() {
           Mínima
         </Typography>
         <Slider
+        defaultValue={0}
+          value={humedadMin}
+          onChange={onHandleHumedadMin}
           id="HumedadMinimaSlider"
           orientation="vertical"
           getAriaValueText={valuetext}
@@ -346,6 +340,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={humedadMin}
+                onChange={onHandleHumedadMin}
           id="humedadMinima"
           label="Valor"
           type="number"
@@ -362,7 +357,10 @@ const Mantenimiento=React.memo(function() {
           Máxima
         </Typography>
         <Slider
+        defaultValue={0}
+        value={humedadMax}
         id="HumedadMaximaSlider"
+        onChange={onHandleHumedadMax}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -375,6 +373,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={humedadMax}
+                onChange={onHandleHumedadMax}
           id="humedadMaxima"
           label="Valor"
           type="number"
@@ -417,6 +416,9 @@ const Mantenimiento=React.memo(function() {
           Mínima
         </Typography>
         <Slider
+        defaultValue={0}
+        value={phMin}
+        onChange={onHandlePhMin}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -429,6 +431,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={phMin}
+                onChange={onHandlePhMin}
           id="PhMinima"
           label="Valor"
           type="number"
@@ -445,6 +448,9 @@ const Mantenimiento=React.memo(function() {
           Máxima
         </Typography>
         <Slider
+        defaultValue={0}
+                value={phMax}
+                onChange={onHandlePhMax}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -457,6 +463,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={phMax}
+                onChange={onHandlePhMax}
           id="PhMaxima"
           label="Valor"
           type="number"
@@ -499,6 +506,9 @@ const Mantenimiento=React.memo(function() {
           Mínima
         </Typography>
         <Slider
+        defaultValue={0}
+        value={ecMin}
+        onChange={onHandleEcMin}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -511,6 +521,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={ecMin}
+                onChange={onHandleEcMin}
           id="ECMinima"
           label="Valor"
           type="number"
@@ -527,6 +538,9 @@ const Mantenimiento=React.memo(function() {
           Máxima
         </Typography>
         <Slider
+        defaultValue={0}
+        value={ecMax}
+        onChange={onHandleEcMax}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -539,6 +553,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={ecMax}
+                onChange={onHandleEcMax}
           id="ECMaxima"
           label="Valor"
           type="number"
@@ -582,6 +597,9 @@ const Mantenimiento=React.memo(function() {
           Mínima
         </Typography>
         <Slider
+        defaultValue={0}
+        value={luminosidadMin}
+        onChange={onHandleLuminosidadMin}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -594,6 +612,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={luminosidadMin}
+                onChange={onHandleLuminosidadMin}
           id="LuminosidadMinima"
           label="Valor"
           type="number"
@@ -610,6 +629,9 @@ const Mantenimiento=React.memo(function() {
           Máxima
         </Typography>
         <Slider
+        defaultValue={0}
+        value={luminosidadMax}
+        onChange={onHandleLuminosidadMax}
           orientation="vertical"
           getAriaValueText={valuetext}
           aria-labelledby="vertical-slider"
@@ -622,6 +644,7 @@ const Mantenimiento=React.memo(function() {
       >
                 <TextField
                 value={luminosidadMax}
+                onChange={onHandleLuminosidadMax}
           id="LuminosidadMaxima"
           label="Valor"
           type="number"

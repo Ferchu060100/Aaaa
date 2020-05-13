@@ -93,7 +93,7 @@ class Reporte extends React.Component{
                 </Grid>
                 <Grid item xs={3} className={classes.footerGridMonitor}>
                     
-                <ColorButton ></ColorButton>
+                <ColorButton >Validar</ColorButton>
                 </Grid>
             </Grid>
             </div>

@@ -157,7 +157,7 @@ export default function Historial(props){
         </Grid>
         <Grid item xs={3} className={classes.footerGridMonitor}>
             
-        <Link to= "/monitoreo">
+        <Link to= "/home/monitor">
         <ColorButton >Volver</ColorButton>
         </Link>
         

@@ -29,6 +29,28 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+function IniciarSesionOnClick(props){
+  var username=document.getElementById('email').value;
+  var password=document.getElementById('password').value;
+  var datos={
+    "username": username,
+    "password": password
+  }
+  datos=JSON.stringify(datos);
+  $.ajax({
+    url: BaseURL+signIn,
+    method:"POST",
+    data: datos,
+    dataType:'JSON',
+    success: function(respuesta){
+      if(respuesta.result=="ok"){
+        Auth.login(()=>{
+          props.history.push('/home/monitor');
+        });
+      }
+    }
+ });
+}
 const SignIn= React.memo(function(props) {
   const classes = useStyles();
   const [showError,setShowError]=React.useState(false);
@@ -55,7 +77,7 @@ const SignIn= React.memo(function(props) {
         if(respuesta.result=="ok"){
           setShowError(false);
           Auth.login(()=>{
-            props.history.push('/monitoreo');
+            props.history.push('/home/monitor');
           });
         }
       },

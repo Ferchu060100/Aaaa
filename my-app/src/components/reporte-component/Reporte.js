@@ -33,7 +33,7 @@ const ColorButton = withStyles((theme) => ({
         minWidth: 120,
     },
 })
-class Historico extends React.Component{
+class Reporte extends React.Component{
     
     constructor(props) {
         super(props);
@@ -43,7 +43,7 @@ class Historico extends React.Component{
         this.loadSensorInfo = this.loadSensorInfo.bind(this);
       }
 
-      loadSensorInfo (){
+    loadSensorInfo (){
         getSelectSensorData().then(
             function(result){
                 console.log(result)
@@ -93,7 +93,7 @@ class Historico extends React.Component{
                 </Grid>
                 <Grid item xs={3} className={classes.footerGridMonitor}>
                     
-                <ColorButton ></ColorButton>
+                <ColorButton >Validar</ColorButton>
                 </Grid>
             </Grid>
             </div>
@@ -101,4 +101,4 @@ class Historico extends React.Component{
           );
     }
 }
-export default withStyles(styles)(Historico);
+export default withStyles(styles)(Reporte);

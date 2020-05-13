@@ -64,6 +64,137 @@ export async function getSelectSensorData() {
 
 };
 
+export async function getCultivoActual() {
+    let endPoint = '/cultivos'
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
+    });
+    let responseJWT = await response.json();
+
+    if(responseJWT.result === 'ok' && response.data !== []){
+        return responseJWT.data.sort((a, b) => (a.fecha_inicio > b.fecha_inicio) ? 1 : -1).slice(-1)[0]
+    }
+    else{
+        return null;
+    }
+    
+
+};
+
+
+export async function getCultivoAnterior() {
+    let endPoint = '/cultivos'
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
+    });
+    let responseJWT = await response.json();
+
+    if(responseJWT.result === 'ok' && responseJWT.data.length > 1){
+        return responseJWT.data.sort((a, b) => (a.fecha_inicio > b.fecha_inicio) ? 1 : -1).slice(-2)[0]
+    }
+    else{
+        return null;
+    }
+    
+
+};
+
+export async function getCultivoActualDataBySensorId(sensor) {
+    var cultivoId = '';
+    var data = await getCultivoActual();
+    if(data!==null)
+    {
+        cultivoId =  data.codigo;
+    }
+    
+    
+    let endPoint = '/cultivos/'+cultivoId+"/data"
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
+    });
+    let responseJWT = await response.json();
+
+    if(responseJWT.result === 'ok' ){
+        let scanResults = [];
+        responseJWT.data.forEach(function(obj, idx){
+            if(sensor==="1luminosidad")
+            {
+                scanResults.push(obj.luminosidad)
+            }
+            else if(sensor==="1humedad"){
+                scanResults.push(obj.humedad)
+            }
+            else if(sensor==="1ph"){
+                scanResults.push(obj.ph)
+            }
+            else if(sensor==="1temperatura"){
+                scanResults.push(obj.temperatura)
+            }
+            else if(sensor==="1conductividad"){
+                scanResults.push(obj.temperatura)
+            }
+            if (idx === 9) {
+                return scanResults;
+            }
+          
+        });
+        return scanResults;
+    }
+    else{
+        return [];
+    }
+    
+
+};
+
+export async function getCultivoAnteriorDataBySensorId(sensor) {
+    var cultivoId = '';
+    var data = await getCultivoAnterior();
+
+    if(data!==null)
+    {
+        cultivoId =  data.codigo;
+    }
+    
+    let endPoint = '/cultivos/'+cultivoId+"/data"
+    let response = await  fetch(BaseURL + endPoint,{
+        method: 'GET'
+    });
+    let responseJWT = await response.json();
+
+    if(responseJWT.result === 'ok' ){
+        let scanResults = [];
+        responseJWT.data.forEach(function(obj, idx){
+            if(sensor==="1luminosidad")
+            {
+                scanResults.push(obj.luminosidad)
+            }
+            else if(sensor==="1humedad"){
+                scanResults.push(obj.humedad)
+            }
+            else if(sensor==="1ph"){
+                scanResults.push(obj.ph)
+            }
+            else if(sensor==="1temperatura"){
+                scanResults.push(obj.temperatura)
+            }
+            else if(sensor==="1conductividad"){
+                scanResults.push(obj.temperatura)
+            }
+            if (idx === 9) {
+                return scanResults;
+            }
+          
+        });
+        return scanResults;
+    }
+    else{
+        return [];
+    }
+    
+    
+
+};
 
 export async function getDataReport(sensor) {
     let endPoint = '/sensores/data'
@@ -74,16 +205,23 @@ export async function getDataReport(sensor) {
     
     if(responseJWT.result == 'ok'){
         let scanResults = [];
-        console.log(responseJWT)
         responseJWT.data.forEach(function(obj, idx){
             if(sensor==="1luminosidad")
             {
                 scanResults.push(obj.luminosidad)
             }
-            else{
+            else if(sensor==="1humedad"){
                 scanResults.push(obj.humedad)
             }
-
+            else if(sensor==="1ph"){
+                scanResults.push(obj.ph)
+            }
+            else if(sensor==="1temperatura"){
+                scanResults.push(obj.temperatura)
+            }
+            else if(sensor==="1conductividad"){
+                scanResults.push(obj.temperatura)
+            }
             if (idx === 9) return scanResults;
           
         });

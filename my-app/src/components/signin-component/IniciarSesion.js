@@ -45,7 +45,7 @@ function IniciarSesionOnClick(props){
     success: function(respuesta){
       if(respuesta.result=="ok"){
         Auth.login(()=>{
-          props.history.push('/monitoreo');
+          props.history.push('/home/monitor');
         });
       }
     }

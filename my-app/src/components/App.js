@@ -1,15 +1,18 @@
 import React  from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
-import {BrowserRouter as Router,Route} from 'react-router-dom';
+
+import {BrowserRouter as Router,Route, Switch} from 'react-router-dom';
+import Historial  from './monitor-component/Historial';
 import SignUp from './signup-component/RegistrarUsuario'
 import SignIn from './signin-component/IniciarSesion'
 import Mantenimiento from './mantenimiento-component/Mantenimiento'
 import Graficos from './Historico'
 import Monitor from './monitor-component/Monitor';  
-import Historico  from './monitor-component/Historico';
+import Reporte  from './reporte-component/Reporte';
 import Example  from './prueba-component/Prueba';
 import ProtectedRoute from './authentication-component/ProtectedRoute';
+import Home from './home-component/Home';
 function lineOptions(labels = []) {
   return{
   responsive: true,
@@ -143,11 +146,18 @@ function App() {
               <Route path="/SignUp" component={SignUp}/>
               <Route path="/SignIn" component={SignIn}/>
               <ProtectedRoute path="/mantenimiento" component={Mantenimiento}/>
-              <ProtectedRoute path="/monitoreo" component={Monitor}/>
-              <ProtectedRoute path="/historico" component={Historico}/>
+              
+{/*               <ProtectedRoute path="/monitoreo" component={Monitor}/>*/}
+              
               <ProtectedRoute path="/prueba" component={Example}/>
+              <Switch>
+                  <Route path="/home/historial/:tipohistorial" component={Historial}></Route>
+                  <Route path="/home/:child" component={Home}/>
+                  <Route path="/monitor" component={Monitor}></Route>
+                  <Route path="/reportes" component={Reporte}/> 
+              </Switch>
       </Router>
-      <ToastContainer />
+      {/*<ToastContainer />*/}
   </div>
 );
   }
